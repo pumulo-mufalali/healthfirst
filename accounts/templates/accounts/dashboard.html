@@ -1,0 +1,458 @@
+{% extends "accounts/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid px-4">
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+        <div class="d-flex">
+            <button class="btn btn-primary me-2">
+                <i class="fas fa-plus me-2"></i>New Appointment
+            </button>
+            <div class="dropdown">
+                <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                    <i class="fas fa-calendar me-2"></i>Today
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#">Today</a></li>
+                    <li><a class="dropdown-item" href="#">This Week</a></li>
+                    <li><a class="dropdown-item" href="#">This Month</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="row">
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs fw-bold text-primary text-uppercase mb-1">
+                                Total Patients
+                            </div>
+                            <div class="h5 mb-0 fw-bold text-gray-800">1,248</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-users fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs fw-bold text-success text-uppercase mb-1">
+                                Today's Appointments
+                            </div>
+                            <div class="h5 mb-0 fw-bold text-gray-800">24</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-calendar-check fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs fw-bold text-info text-uppercase mb-1">
+                                Pending Records
+                            </div>
+                            <div class="h5 mb-0 fw-bold text-gray-800">18</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-file-medical fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs fw-bold text-warning text-uppercase mb-1">
+                                Revenue (Monthly)
+                            </div>
+                            <div class="h5 mb-0 fw-bold text-gray-800">$24,560</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts and Appointments -->
+    <div class="row">
+        <!-- Appointments Chart -->
+        <div class="col-xl-8 col-lg-7">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 fw-bold text-primary">Appointments Overview</h6>
+                    <div class="dropdown no-arrow">
+                        <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right shadow">
+                            <a class="dropdown-item" href="#">View Report</a>
+                            <a class="dropdown-item" href="#">Export Data</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="chart-area">
+                        <canvas id="appointmentsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Today's Schedule -->
+        <div class="col-xl-4 col-lg-5">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 fw-bold text-primary">Today's Schedule</h6>
+                    <span class="badge bg-primary">24 Appointments</span>
+                </div>
+                <div class="card-body">
+                    <div class="schedule-list">
+                        <div class="d-flex border-bottom pb-3 mb-3">
+                            <div class="flex-shrink-0 me-3">
+                                <div class="bg-primary text-white rounded-circle p-2 text-center" style="width: 40px; height: 40px;">
+                                    9:00
+                                </div>
+                            </div>
+                            <div class="flex-grow-1">
+                                <h6 class="fw-bold mb-0">Robert Johnson</h6>
+                                <p class="mb-0 text-muted">Annual Checkup</p>
+                            </div>
+                            <div class="flex-shrink-0">
+                                <span class="badge bg-success">Confirmed</span>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex border-bottom pb-3 mb-3">
+                            <div class="flex-shrink-0 me-3">
+                                <div class="bg-primary text-white rounded-circle p-2 text-center" style="width: 40px; height: 40px;">
+                                    10:30
+                                </div>
+                            </div>
+                            <div class="flex-grow-1">
+                                <h6 class="fw-bold mb-0">Sarah Williams</h6>
+                                <p class="mb-0 text-muted">Follow-up Consultation</p>
+                            </div>
+                            <div class="flex-shrink-0">
+                                <span class="badge bg-success">Confirmed</span>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex border-bottom pb-3 mb-3">
+                            <div class="flex-shrink-0 me-3">
+                                <div class="bg-primary text-white rounded-circle p-2 text-center" style="width: 40px; height: 40px;">
+                                    11:15
+                                </div>
+                            </div>
+                            <div class="flex-grow-1">
+                                <h6 class="fw-bold mb-0">Michael Chen</h6>
+                                <p class="mb-0 text-muted">Cardiology Consultation</p>
+                            </div>
+                            <div class="flex-shrink-0">
+                                <span class="badge bg-warning">Pending</span>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex border-bottom pb-3 mb-3">
+                            <div class="flex-shrink-0 me-3">
+                                <div class="bg-primary text-white rounded-circle p-2 text-center" style="width: 40px; height: 40px;">
+                                    14:00
+                                </div>
+                            </div>
+                            <div class="flex-grow-1">
+                                <h6 class="fw-bold mb-0">Emma Rodriguez</h6>
+                                <p class="mb-0 text-muted">Dermatology Follow-up</p>
+                            </div>
+                            <div class="flex-shrink-0">
+                                <span class="badge bg-success">Confirmed</span>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex">
+                            <div class="flex-shrink-0 me-3">
+                                <div class="bg-primary text-white rounded-circle p-2 text-center" style="width: 40px; height: 40px;">
+                                    15:30
+                                </div>
+                            </div>
+                            <div class="flex-grow-1">
+                                <h6 class="fw-bold mb-0">James Wilson</h6>
+                                <p class="mb-0 text-muted">New Patient Registration</p>
+                            </div>
+                            <div class="flex-shrink-0">
+                                <span class="badge bg-success">Confirmed</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-4">
+                        <a href="#" class="btn btn-sm btn-outline-primary">
+                            View All Appointments <i class="fas fa-arrow-right ms-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Patients and Activity -->
+    <div class="row">
+        <!-- Recent Patients -->
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow">
+                <div class="card-header py-3">
+                    <h6 class="m-0 fw-bold text-primary">Recent Patients</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Patient</th>
+                                    <th>Last Visit</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <img src="https://randomuser.me/api/portraits/men/32.jpg" class="rounded-circle me-3" width="36" height="36" alt="John Doe">
+                                            <div>
+                                                <div class="fw-bold">John Doe</div>
+                                                <div class="text-muted small">ID: MED-00123</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>Sep 12, 2023</td>
+                                    <td><span class="badge bg-success">Active</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <img src="https://randomuser.me/api/portraits/women/44.jpg" class="rounded-circle me-3" width="36" height="36" alt="Jane Smith">
+                                            <div>
+                                                <div class="fw-bold">Jane Smith</div>
+                                                <div class="text-muted small">ID: MED-00145</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>Sep 10, 2023</td>
+                                    <td><span class="badge bg-warning">Follow-up</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <img src="https://randomuser.me/api/portraits/men/22.jpg" class="rounded-circle me-3" width="36" height="36" alt="Robert Johnson">
+                                            <div>
+                                                <div class="fw-bold">Robert Johnson</div>
+                                                <div class="text-muted small">ID: MED-00189</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>Sep 8, 2023</td>
+                                    <td><span class="badge bg-success">Active</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <img src="https://randomuser.me/api/portraits/women/68.jpg" class="rounded-circle me-3" width="36" height="36" alt="Emma Rodriguez">
+                                            <div>
+                                                <div class="fw-bold">Emma Rodriguez</div>
+                                                <div class="text-muted small">ID: MED-00201</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>Sep 5, 2023</td>
+                                    <td><span class="badge bg-info">New</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <img src="https://randomuser.me/api/portraits/men/41.jpg" class="rounded-circle me-3" width="36" height="36" alt="Michael Chen">
+                                            <div>
+                                                <div class="fw-bold">Michael Chen</div>
+                                                <div class="text-muted small">ID: MED-00215</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>Sep 2, 2023</td>
+                                    <td><span class="badge bg-success">Active</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="text-center mt-3">
+                        <a href="#" class="btn btn-sm btn-outline-primary">
+                            View All Patients <i class="fas fa-arrow-right ms-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Recent Activity -->
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow">
+                <div class="card-header py-3">
+                    <h6 class="m-0 fw-bold text-primary">Recent Activity</h6>
+                </div>
+                <div class="card-body">
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-icon bg-primary">
+                                <i class="fas fa-user-plus text-white"></i>
+                            </div>
+                            <div class="timeline-content">
+                                <div class="fw-bold">New Patient Registered</div>
+                                <p class="mb-0">James Wilson registered as a new patient</p>
+                                <small class="text-muted">2 hours ago</small>
+                            </div>
+                        </div>
+                        
+                        <div class="timeline-item">
+                            <div class="timeline-icon bg-success">
+                                <i class="fas fa-file-medical text-white"></i>
+                            </div>
+                            <div class="timeline-content">
+                                <div class="fw-bold">Medical Record Updated</div>
+                                <p class="mb-0">Dr. Sarah Johnson updated Robert Johnson's medical record</p>
+                                <small class="text-muted">4 hours ago</small>
+                            </div>
+                        </div>
+                        
+                        <div class="timeline-item">
+                            <div class="timeline-icon bg-info">
+                                <i class="fas fa-calendar-check text-white"></i>
+                            </div>
+                            <div class="timeline-content">
+                                <div class="fw-bold">Appointment Scheduled</div>
+                                <p class="mb-0">New appointment scheduled for Emma Rodriguez on Sep 15</p>
+                                <small class="text-muted">Yesterday</small>
+                            </div>
+                        </div>
+                        
+                        <div class="timeline-item">
+                            <div class="timeline-icon bg-warning">
+                                <i class="fas fa-money-bill-wave text-white"></i>
+                            </div>
+                            <div class="timeline-content">
+                                <div class="fw-bold">Payment Received</div>
+                                <p class="mb-0">Payment of $150 received from John Doe for consultation</p>
+                                <small class="text-muted">Sep 10, 2023</small>
+                            </div>
+                        </div>
+                        
+                        <div class="timeline-item">
+                            <div class="timeline-icon bg-danger">
+                                <i class="fas fa-prescription text-white"></i>
+                            </div>
+                            <div class="timeline-content">
+                                <div class="fw-bold">Prescription Issued</div>
+                                <p class="mb-0">New prescription issued for Jane Smith</p>
+                                <small class="text-muted">Sep 9, 2023</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-3">
+                        <a href="#" class="btn btn-sm btn-outline-primary">
+                            View All Activity <i class="fas fa-arrow-right ms-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Appointments Chart
+    document.addEventListener('DOMContentLoaded', function() {
+        const ctx = document.getElementById('appointmentsChart').getContext('2d');
+        const appointmentsChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                datasets: [{
+                    label: 'Appointments',
+                    data: [18, 22, 15, 24, 20, 8, 3],
+                    backgroundColor: 'rgba(26, 115, 232, 0.8)',
+                    borderColor: 'rgba(26, 115, 232, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 5
+                        }
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}
