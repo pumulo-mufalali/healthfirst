@@ -1,0 +1,42 @@
+{% extends 'accounts/base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1 class="my-4">Patient List</h1>
+    <a href="{% url 'patients:create' %}" class="btn btn-primary mb-3">Add New Patient</a>
+    
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Age</th>
+                    <th>Gender</th>
+                    <th>Blood Group</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for patient in patients %}
+                <tr>
+                    <td>{{ patient.user.get_full_name }}</td>
+                    <td>{{ patient.user.email }}</td>
+                    <td>{{ patient.age }}</td>
+                    <td>{{ patient.get_gender_display }}</td>
+                    <td>{{ patient.blood_group|default:"-" }}</td>
+                    <td>
+                        <a href="{% url 'patients:detail' patient.pk %}" class="btn btn-sm btn-info">View</a>
+                        <a href="{% url 'patients:update' patient.pk %}" class="btn btn-sm btn-warning">Edit</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center">No patients found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

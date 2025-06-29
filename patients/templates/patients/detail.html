@@ -1,0 +1,69 @@
+{% extends 'accounts/base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="card my-4">
+        <div class="card-header bg-primary text-white">
+            <h2 class="mb-0">Patient Details</h2>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    {% if patient.user.profile_picture %}
+                    <img src="{{ patient.user.profile_picture.url }}" class="img-fluid rounded-circle mb-3" style="max-height: 200px;">
+                    {% else %}
+                    <div class="bg-light rounded-circle d-flex align-items-center justify-content-center mb-3" style="width: 200px; height: 200px; margin: 0 auto;">
+                        <span class="text-muted">No photo</span>
+                    </div>
+                    {% endif %}
+                    <h3>{{ patient.user.get_full_name }}</h3>
+                    <p class="text-muted">{{ patient.user.email }}</p>
+                </div>
+                <div class="col-md-8">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4>Personal Information</h4>
+                            <p><strong>Date of Birth:</strong> {{ patient.date_of_birth }} (Age: {{ patient.age }})</p>
+                            <p><strong>Gender:</strong> {{ patient.get_gender_display }}</p>
+                            <p><strong>Blood Group:</strong> {{ patient.blood_group|default:"Not specified" }}</p>
+                            <p><strong>Height:</strong> {{ patient.height|default:"Not specified" }}</p>
+                            <p><strong>Weight:</strong> {{ patient.weight|default:"Not specified" }} kg</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h4>Contact Information</h4>
+                            <p><strong>Phone:</strong> {{ patient.user.phone|default:"Not specified" }}</p>
+                            <p><strong>Address:</strong> {{ patient.user.address|default:"Not specified"|linebreaks }}</p>
+                            <p><strong>Emergency Contact:</strong> {{ patient.emergency_contact|default:"Not specified" }}</p>
+                            <p><strong>Emergency Phone:</strong> {{ patient.emergency_phone|default:"Not specified" }}</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4>Medical Information</h4>
+                            <p><strong>Allergies:</strong> {{ patient.allergies|default:"None"|linebreaks }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h4>Insurance</h4>
+                            <p><strong>Provider:</strong> {{ patient.insurance_provider|default:"Not specified" }}</p>
+                            <p><strong>Number:</strong> {{ patient.insurance_number|default:"Not specified" }}</p>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <h4>Medical History</h4>
+                            <div class="border p-3">
+                                {{ patient.medical_history|default:"No medical history recorded"|linebreaks }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <a href="{% url 'patients:update' patient.pk %}" class="btn btn-warning">Edit</a>
+            <a href="{% url 'patients:list' %}" class="btn btn-secondary">Back to List</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

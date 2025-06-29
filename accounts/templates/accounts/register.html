@@ -1,0 +1,190 @@
+{% extends 'accounts/base.html' %}
+
+{% block content %}
+	<style>
+			.signup-container {
+					display: flex;
+					justify-content: center;
+					align-items: center;
+					min-height: 100vh;
+					background-color: #f5f7fb;
+					padding: 20px;
+			}
+
+			.signup-card {
+					background: white;
+					border-radius: 10px;
+					box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+					padding: 40px;
+					width: 100%;
+					max-width: 700px;
+			}
+
+			.signup-title {
+					color: #2c3e50;
+					text-align: center;
+					margin-bottom: 30px;
+					font-weight: 600;
+			}
+
+			.signup-form {
+					display: flex;
+					flex-direction: column;
+					gap: 20px;
+			}
+
+			.form-group {
+					display: flex;
+					flex-direction: column;
+					gap: 8px;
+			}
+
+			.form-row {
+					display: flex;
+					gap: 20px;
+			}
+
+			.form-row .form-group {
+					flex: 1;
+			}
+
+			label {
+					font-weight: 500;
+					color: #34495e;
+			}
+
+			.form-control {
+					padding: 12px 15px;
+					border: 1px solid #ddd;
+					border-radius: 6px;
+					font-size: 16px;
+					transition: border-color 0.3s;
+			}
+
+			.form-control:focus {
+					border-color: #3498db;
+					outline: none;
+					box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+			}
+
+			.btn-signup {
+					background-color: #3498db;
+					color: white;
+					padding: 12px;
+					border: none;
+					border-radius: 6px;
+					font-size: 16px;
+					font-weight: 500;
+					cursor: pointer;
+					transition: background-color 0.3s;
+					margin-top: 10px;
+			}
+
+			.btn-signup:hover {
+					background-color: #2980b9;
+			}
+
+			.login-link {
+					text-align: center;
+					margin-top: 20px;
+					color: #7f8c8d;
+			}
+
+			.login-link a {
+					color: #3498db;
+					text-decoration: none;
+					font-weight: 500;
+			}
+
+			.login-link a:hover {
+					text-decoration: underline;
+			}
+
+			/* Responsive adjustments */
+			@media (max-width: 768px) {
+					.form-row {
+							flex-direction: column;
+							gap: 20px;
+					}
+					
+					.signup-card {
+							padding: 30px 20px;
+					}
+			}
+	</style>
+
+	<div class="signup-container">
+			<div class="signup-card">
+					<h2 class="signup-title">Hospital Management System Registration</h2>
+					
+					<form method="post" enctype="multipart/form-data" class="signup-form">
+							{% csrf_token %}
+							
+							<div class="form-group">
+									<label for="username">Username*</label>
+									<input type="text" id="username" name="username" required class="form-control">
+							</div>
+							
+							<div class="form-row">
+									<div class="form-group">
+											<label for="first_name">First Name*</label>
+											<input type="text" id="first_name" name="first_name" required class="form-control">
+									</div>
+									
+									<div class="form-group">
+											<label for="last_name">Last Name*</label>
+											<input type="text" id="last_name" name="last_name" required class="form-control">
+									</div>
+							</div>
+							
+							<div class="form-group">
+									<label for="email">Email*</label>
+									<input type="email" id="email" name="email" required class="form-control">
+							</div>
+							
+							<div class="form-row">
+									<div class="form-group">
+											<label for="password1">Password*</label>
+											<input type="password" id="password1" name="password1" required class="form-control">
+									</div>
+									
+									<div class="form-group">
+											<label for="password2">Confirm Password*</label>
+											<input type="password" id="password2" name="password2" required class="form-control">
+									</div>
+							</div>
+							
+							<div class="form-group">
+									<label for="user_type">I am a*</label>
+									<select id="user_type" name="user_type" required class="form-control">
+											<option value="">Select your role</option>
+											<option value="patient">Patient</option>
+											<option value="doctor">Doctor</option>
+											<option value="staff">Staff Member</option>
+									</select>
+							</div>
+							
+							<div class="form-group">
+									<label for="phone">Phone Number</label>
+									<input type="tel" id="phone" name="phone" class="form-control">
+							</div>
+							
+							<div class="form-group">
+									<label for="address">Address</label>
+									<textarea id="address" name="address" rows="3" class="form-control"></textarea>
+							</div>
+							
+							<div class="form-group">
+									<label for="profile_picture">Profile Picture</label>
+									<input type="file" id="profile_picture" name="profile_picture" accept="image/*" class="form-control-file">
+							</div>
+							
+							<button type="submit" class="btn btn-primary btn-signup">Register</button>
+							
+							<div class="login-link">
+									Already have an account? <a href="{% url 'login' %}">Login here</a>
+							</div>
+					</form>
+			</div>
+	</div>
+{% endblock %}
