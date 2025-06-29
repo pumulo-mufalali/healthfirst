@@ -23,13 +23,13 @@
                     </li>
                     {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'patients:list' %}">Patients</a>
+                        <a class="nav-link" href="#">Patients</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'appointments:list' %}">Appointments</a>
+                        <a class="nav-link" href="#">Appointments</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'records:list' %}">Medical Records</a>
+                        <a class="nav-link" href="#">Medical Records</a>
                     </li>
                     {% endif %}
                 </ul>
@@ -40,7 +40,7 @@
                             <i class="fas fa-user me-1"></i> {{ user.get_full_name|default:user.username }}
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{% url 'accounts:profile' %}">Profile</a></li>
+                            <li><a class="dropdown-item" href="#">Profile</a></li>
                             <li><a class="dropdown-item" href="{% url 'dashboard' %}">Dashboard</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
@@ -51,7 +51,7 @@
                         <a class="nav-link" href="{% url 'login' %}">Login</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" >Register</a>
+                        <a class="nav-link" href="{% url 'register' %}">Register</a>
                     </li>
                     {% endif %}
                 </ul>
@@ -67,7 +67,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-4 mb-4">
-                    <h5>SmartCare Pro</h5>
+                    <h5>HealthFirst</h5>
                     <p>Providing quality healthcare services with compassion and cutting-edge technology.</p>
                 </div>
                 <div class="col-md-4 mb-4">
@@ -81,15 +81,15 @@
                 <div class="col-md-4">
                     <h5>Contact Us</h5>
                     <address>
-                        123 Medical Center Dr<br>
-                        Health City, HC 12345<br>
-                        Phone: (123) 456-7890<br>
-                        Email: info@smartcarepro.com
+                        Unza, main campus<br>
+                        Lusaka City<br>
+                        Phone: 0971217311<br>
+                        Email: crispumulo@gmail.com
                     </address>
                 </div>
             </div>
             <div class="text-center mt-4">
-                <p>&copy; 2023 SmartCare Pro. All rights reserved.</p>
+                <p>&copy; 2025 HealthFirst. All rights reserved.</p>
             </div>
         </div>
     </footer>
