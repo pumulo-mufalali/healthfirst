@@ -1,7 +1,4 @@
 from django.contrib import admin
-
-# Register your models here.
-from django.contrib import admin
 from .models import Patient
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth import get_user_model
@@ -13,6 +10,10 @@ class PatientInline(admin.StackedInline):
     can_delete = False
     verbose_name_plural = 'Patient Profile'
     fk_name = 'user'
+
+@admin.display(description='Age')
+def age_display(self, obj):
+    return obj.age if obj.age is not None else "N/A"
 
 class CustomUserAdmin(UserAdmin):
     inlines = (PatientInline,)

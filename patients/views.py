@@ -17,10 +17,11 @@ def patient_list(request):
 
 
 def patient_detail(request, pk):
-    patient = get_object_or_404(Patient, pk=pk)
+    patient = Patient.objects.get(user_id=pk)
     if not (request.user == patient.user or is_admin_or_staff(request.user)):
-        return redirect('home')  # Or permission denied
-    return render(request, 'patients/detail.html', {'patient': patient})
+        return redirect('home')
+    context = {'patient': patient}
+    return render(request, 'patients/detail.html', context)
 
 
 def patient_create(request):
@@ -31,32 +32,34 @@ def patient_create(request):
             user = user_form.save(commit=False)
             user.user_type = 'patient'
             user.save()
+
             patient = patient_form.save(commit=False)
             patient.user = user
             patient.save()
-            return redirect('patients:detail', pk=patient.pk)
+            return redirect('patients:patient_detail', pk=patient.pk)
     else:
         user_form = PatientUserForm()
         patient_form = PatientForm()
-    return render(request, 'patients/form.html', {
-        'user_form': user_form,
-        'form': patient_form,
-        'title': 'Create Patient'
-    })
+
+    context = {'user_form': user_form, 'patient_form': patient_form, 'title': 'Create Patient'}
+
+    return render(request, 'patients/form.html', context)
 
 def patient_update(request, pk):
-    patient = get_object_or_404(Patient, pk=pk)
+    patient = get_object_or_404(Patient, user_id=pk)
+    patient_name = patient.user.first_name
+
     if not (request.user == patient.user or is_admin_or_staff(request.user)):
-        return redirect('home')  # Or permission denied
+        return redirect('home')
         
     if request.method == 'POST':
         form = PatientForm(request.POST, instance=patient)
         if form.is_valid():
             form.save()
-            return redirect('patients:detail', pk=patient.pk)
+            return redirect('patients:patient_detail', pk=patient.user_id)
     else:
         form = PatientForm(instance=patient)
-    return render(request, 'patients/form.html', {
-        'form': form,
-        'title': 'Update Patient'
-    })
+
+    context = {'patient_form': form, 'title': 'Update Patient', 'patient_name':patient_name}
+
+    return render(request, 'patients/form.html', context)
