@@ -23,8 +23,8 @@ class Patient(models.Model):
     )
     
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='patient_profile')
-    date_of_birth = models.DateField()
-    gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
+    date_of_birth = models.DateField(null=True, blank=True)
+    gender = models.CharField(max_length=1, choices=GENDER_CHOICES, null=True, blank=True)
     blood_group = models.CharField(max_length=5, choices=BLOOD_GROUP_CHOICES, blank=True, null=True)
     height = models.CharField(max_length=10, blank=True, null=True)
     weight = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
@@ -41,5 +41,7 @@ class Patient(models.Model):
     
     @property
     def age(self):
-        import datetime
-        return int((datetime.date.today() - self.date_of_birth).days / 365.25)
+        if self.date_of_birth:
+            import datetime
+            return int((datetime.date.today() - self.date_of_birth).days / 365.25)
+        return None

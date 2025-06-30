@@ -21,7 +21,7 @@ class PatientForm(forms.ModelForm):
         fields = [
             'date_of_birth', 'gender', 'blood_group', 'height', 'weight',
             'allergies', 'medical_history', 'emergency_contact',
-            'emergency_phone', 'insurance_provider', 'insurance_number'
+            'emergency_phone', 'insurance_provider', 'insurance_number',
         ]
         widgets = {
             'date_of_birth': forms.DateInput(attrs={'type': 'date'}),
