@@ -1,0 +1,108 @@
+{% extends 'accounts/base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="card my-4">
+        <div class="card-header bg-primary text-white">
+            <div class="d-flex justify-content-between align-items-center">
+                <h2 class="mb-0">Dr. {{ doctor.user.get_full_name }}</h2>
+                <span class="badge bg-light text-dark">{{ doctor.specialization }}</span>
+            </div>
+        </div>
+        
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    {% if doctor.user.profile_picture %}
+                    <img src="{{ doctor.user.profile_picture.url }}" class="img-fluid rounded-circle mb-3" style="max-height: 200px;">
+                    {% else %}
+                    <div class="bg-light rounded-circle d-flex align-items-center justify-content-center mb-3" style="width: 200px; height: 200px; margin: 0 auto;">
+                        <span class="text-muted">No photo</span>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Contact Info</h5>
+                            <p class="card-text">
+                                <strong>Phone:</strong> {{ doctor.user.phone }}<br>
+                                <strong>Email:</strong> {{ doctor.user.email }}<br>
+                                <strong>Hospital:</strong> {{ doctor.hospital }}<br>
+                                <strong>Department:</strong> {{ doctor.department }}
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Consultation</h5>
+                            <p class="card-text">
+                                <strong>Fee:</strong> ${{ doctor.consultation_fee }}<br>
+                                <strong>Telemedicine:</strong> 
+                                {% if doctor.available_for_telemedicine %}
+                                <span class="text-success">Available</span>
+                                {% else %}
+                                <span class="text-danger">Not Available</span>
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-8">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Professional Information</h5>
+                            <p class="card-text">
+                                <strong>License Number:</strong> {{ doctor.license_number }}<br>
+                                <strong>Years of Experience:</strong> {{ doctor.years_of_experience }}<br>
+                                <strong>Education:</strong> {{ doctor.education|linebreaks }}<br>
+                                <strong>Certifications:</strong> {{ doctor.certifications|default:"None"|linebreaks }}
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Availability</h5>
+                            <div class="row">
+                                {% for availability in doctor.availabilities.all %}
+                                <div class="col-md-4 mb-2">
+                                    <div class="border p-2 {% if availability.is_available %}bg-light{% else %}bg-secondary text-white{% endif %}">
+                                        <strong>{{ availability.get_day_display }}</strong><br>
+                                        {{ availability.start_time|time:"H:i" }} - {{ availability.end_time|time:"H:i" }}<br>
+                                        {% if availability.is_available %}
+                                        <span class="text-success">Available</span>
+                                        {% else %}
+                                        <span class="text-danger">Not Available</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                {% empty %}
+                                <div class="col-12">
+                                    <p class="text-muted">No availability information provided.</p>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">About</h5>
+                            <p class="card-text">{{ doctor.bio|default:"No information provided."|linebreaks }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card-footer">
+            {% if request.user == doctor.user or request.user|is_admin_or_staff %}
+            <a href="{% url 'doctors:update' doctor.pk %}" class="btn btn-warning">Edit Profile</a>
+            {% endif %}
+            <a href="{% url 'doctors:list' %}" class="btn btn-secondary">Back to List</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

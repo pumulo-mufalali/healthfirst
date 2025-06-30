@@ -6,6 +6,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from .forms import UserRegistrationForm, UserProfileForm
 from patients.models import Patient
+
+
 def home(request):
     return render(request, 'accounts/home.html')
 
@@ -46,15 +48,17 @@ def register(request):
             messages.success(request, 'Registration successful.')
 
             if user.user_type == 'patient':
-                Patient.objects.create(user=request.user)
-                return redirect('patients:patient_detail')
+                return redirect('patients:patient_list')
+
             elif user.user_type == 'doctor':
                 return redirect('#')
             else:
                 return redirect('home')
     else:
         form = UserRegistrationForm()
+
     return render(request, 'accounts/register.html', {'form': form})
+
 
 
 # def user_login(request):
