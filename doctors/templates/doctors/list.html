@@ -1,0 +1,60 @@
+{% extends 'accounts/base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1 class="my-4">Doctors Directory</h1>
+    
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <form method="get" class="form-inline">
+                <input type="text" name="q" class="form-control mr-2" placeholder="Search doctors..." value="{{ request.GET.q }}">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+        </div>
+        <div class="col-md-6 text-right">
+            {% if request.user %}
+            <a href="{% url 'doctors:doctor_create' %}" class="btn btn-success">Add New Doctor</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row">
+        {% for doctor in doctors %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Dr. {{ doctor.user.get_full_name }}</h5>
+                </div>
+                <div class="card-body">
+                    <h6 class="card-subtitle mb-2 text-muted">{{ doctor.specialization }}</h6>
+                    <p class="card-text">
+                        <strong>Hospital:</strong> {{ doctor.hospital }}<br>
+                        <strong>Experience:</strong> {{ doctor.years_of_experience }} years<br>
+                        <strong>Rating:</strong> 
+                        <span class="text-warning">
+                            {% for i in "12345" %}
+                                {% if forloop.counter <= doctor.average_rating %}
+                                    ★
+                                {% else %}
+                                    ☆
+                                {% endif %}
+                            {% endfor %}
+                        </span>
+                    </p>
+                </div>
+                <div class="card-footer">
+                    <a href="{% url 'doctors:detail' doctor.pk %}" class="btn btn-sm btn-info">View Profile</a>
+                    {% if request.user == doctor.user or request.user %}
+                    <a href="{% url 'doctors:update' doctor.pk %}" class="btn btn-sm btn-warning">Edit</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-info">No doctors found.</div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

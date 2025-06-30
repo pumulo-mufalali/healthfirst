@@ -61,7 +61,7 @@
             </div>
         </div>
         <div class="card-footer">
-            <a href="{% url 'patients:patient_update' patient.pk %}" class="btn btn-warning">Edit</a>
+            <a href="{% url 'patients:patient_update' patient.user_id %}" class="btn btn-warning">Edit</a>
             <a href="{% url 'patients:patient_list' %}" class="btn btn-secondary">Back to List</a>
         </div>
     </div>

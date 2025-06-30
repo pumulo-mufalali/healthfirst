@@ -21,13 +21,13 @@
                 {% for patient in patients %}
                 <tr>
                     <td>{{ patient.user.username }}</td>
-                    <td>{{ patient.email }}</td>
+                    <td>{{ patient.user.email }}</td>
                     <td>{{ patient.age }}</td>
                     <td>{{ patient.gender }}</td>
                     <td>{{ patient.blood_group|default:"-" }}</td>
                     <td>
-                        <a href="{% url 'patients:patient_detail' patient.pk %}" class="btn btn-sm btn-info">View</a>
-                        <a href="{% url 'patients:patient_update' patient.pk %}" class="btn btn-sm btn-warning">Edit</a>
+                        <a href="{% url 'patients:patient_detail' patient.user_id %}" class="btn btn-sm btn-info">View</a>
+                        <a href="{% url 'patients:patient_update' patient.user_id %}" class="btn btn-sm btn-warning">Edit</a>
                     </td>
                 </tr>
                 {% empty %}
