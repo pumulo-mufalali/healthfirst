@@ -11,7 +11,7 @@ def is_admin_or_staff(user):
 
 # @login_required
 def doctor_list(request):
-    doctors = Doctor.objects.select_related('user', 'specialization').all()
+    doctors = Doctor.objects.select_related('user').all()
     return render(request, 'doctors/list.html', {
         'doctors': doctors,
     })
@@ -19,8 +19,8 @@ def doctor_list(request):
 # @login_required
 def doctor_detail(request, pk):
     doctor = get_object_or_404(
-        Doctor.objects.select_related('user', 'specialization').prefetch_related('availabilities'),
-        pk=pk
+        Doctor.objects.select_related('user').prefetch_related('availabilities'),
+        user_id=pk
     )
     return render(request, 'doctors/detail.html', {'doctor': doctor})
 
@@ -34,10 +34,12 @@ def doctor_create(request):
             user = user_form.save(commit=False)
             user.user_type = 'doctor'
             user.save()
+
             doctor = doctor_form.save(commit=False)
             doctor.user = user
             doctor.save()
-            return redirect('doctors:doctor_detail', pk=doctor.pk)
+
+            return redirect('doctors:doctor_detail', pk=doctor.user_id)
     else:
         user_form = DoctorUserForm()
         doctor_form = DoctorForm()
@@ -49,7 +51,7 @@ def doctor_create(request):
 
 # @login_required
 def doctor_update(request, pk):
-    doctor = get_object_or_404(Doctor, pk=pk)
+    doctor = get_object_or_404(Doctor, user_id=pk)
     if not (request.user == doctor.user or is_admin_or_staff(request.user)):
         return redirect('home')
         
@@ -57,10 +59,11 @@ def doctor_update(request, pk):
         form = DoctorForm(request.POST, instance=doctor)
         if form.is_valid():
             form.save()
-            return redirect('doctors:detail', pk=doctor.pk)
+            print('YA BITCHHHHHHH')
+            return redirect('doctors:doctor_detail', pk)
     else:
         form = DoctorForm(instance=doctor)
-    return render(request, 'doctors/form.html', {
-        'form': form,
-        'title': 'Update Doctor Profile'
-    })
+
+    context = {'form': form, 'title': 'Update Doctor Profile',}
+
+    return render(request, 'doctors/form.html', context)

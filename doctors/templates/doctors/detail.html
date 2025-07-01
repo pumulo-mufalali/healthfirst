@@ -98,10 +98,10 @@
         </div>
         
         <div class="card-footer">
-            {% if request.user == doctor.user or request.user|is_admin_or_staff %}
-            <a href="{% url 'doctors:update' doctor.pk %}" class="btn btn-warning">Edit Profile</a>
+            {% if request.user == doctor.user or request.user%}
+            <a href="{% url 'doctors:doctor_update' user.pk %}" class="btn btn-warning">Edit Profile</a>
             {% endif %}
-            <a href="{% url 'doctors:list' %}" class="btn btn-secondary">Back to List</a>
+            <a href="{% url 'doctors:doctor_list' %}" class="btn btn-secondary">Back to List</a>
         </div>
     </div>
 </div>

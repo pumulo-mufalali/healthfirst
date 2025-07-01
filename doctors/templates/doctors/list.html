@@ -4,26 +4,32 @@
 <div class="container">
     <h1 class="my-4">Doctors Directory</h1>
     
-    <div class="row mb-4">
-        <div class="col-md-6">
-            <form method="get" class="form-inline">
-                <input type="text" name="q" class="form-control mr-2" placeholder="Search doctors..." value="{{ request.GET.q }}">
+
+    <div class="row mb-2">
+        <div class="col-12">
+            <form method="get" class="form-inline d-flex">
+                <input type="text" name="q" class="form-control me-2" placeholder="Search doctors..." value="{{ request.GET.q }}">
                 <button type="submit" class="btn btn-primary">Search</button>
             </form>
         </div>
-        <div class="col-md-6 text-right">
+    </div>
+
+
+    <div class="row mb-4">
+        <div class="col-12 text-end">
             {% if request.user %}
-            <a href="{% url 'doctors:doctor_create' %}" class="btn btn-success">Add New Doctor</a>
+                <a href="{% url 'doctors:doctor_create' %}" class="btn btn-success">Add New Doctor</a>
             {% endif %}
         </div>
     </div>
+
 
     <div class="row">
         {% for doctor in doctors %}
         <div class="col-md-4 mb-4">
             <div class="card h-100">
                 <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">Dr. {{ doctor.user.get_full_name }}</h5>
+                    <h5 class="mb-0">Dr. {{ doctor.user.last_name }} {{ doctor.user.first_name }}</h5>
                 </div>
                 <div class="card-body">
                     <h6 class="card-subtitle mb-2 text-muted">{{ doctor.specialization }}</h6>
@@ -43,9 +49,9 @@
                     </p>
                 </div>
                 <div class="card-footer">
-                    <a href="{% url 'doctors:detail' doctor.pk %}" class="btn btn-sm btn-info">View Profile</a>
-                    {% if request.user == doctor.user or request.user %}
-                    <a href="{% url 'doctors:update' doctor.pk %}" class="btn btn-sm btn-warning">Edit</a>
+                    <a href="{% url 'doctors:doctor_detail' doctor.user_id %}" class="btn btn-sm btn-info">View Profile</a>
+                    {% if request.user == doctor.user %}
+                        <a href="{% url 'doctors:doctor_update' doctor.user_id %}" class="btn btn-sm btn-warning">Edit</a>
                     {% endif %}
                 </div>
             </div>

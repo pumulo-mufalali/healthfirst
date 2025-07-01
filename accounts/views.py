@@ -28,7 +28,7 @@ def loginPage(request):
             if user.user_type == 'admin':
                 return redirect('#')
             elif user.user_type == 'doctor':
-                return redirect('#')
+                return redirect('doctor_detail')
             elif user.user_type == 'patient':
                 return redirect('patients_detail')
             else:
@@ -51,7 +51,7 @@ def register(request):
                 return redirect('patients:patient_list')
 
             elif user.user_type == 'doctor':
-                return redirect('#')
+                return redirect('doctors:doctor_list')
             else:
                 return redirect('home')
     else:
