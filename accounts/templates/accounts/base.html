@@ -40,7 +40,15 @@
                             <i class="fas fa-user me-1"></i> {{ user.get_full_name|default:user.username }}
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{% url 'patients:patient_detail' user.id %}">Profile</a></li>
+                            <li>
+                                {% if user.user_type == 'patient' %}
+                                    <a class="dropdown-item" href="{% url 'patients:patient_detail' user.id %}">Profile</a>
+                                {% elif user.user_type == 'doctor' %}
+                                    <a class="dropdown-item" href="{% url 'doctors:doctor_detail' user.id %}">Profile</a>
+                                {% else %}
+                                    <a class="dropdown-item" href="#">Profile</a>
+                                {% endif %}
+                            </li>
                             <li><a class="dropdown-item" href="{% url 'dashboard' %}">Dashboard</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>

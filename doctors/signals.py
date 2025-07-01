@@ -6,14 +6,12 @@ from .models import Doctor
 User = get_user_model()
 
 @receiver(post_save, sender=User)
-def create_or_update_doctor_profile(sender, instance, created, **kwargs):
-    """
-    Signal to create or update Doctor profile when User is created/updated
-    """
-    if instance.user_type == 'doctor':
-        if created:
-            Doctor.objects.create(user=instance)
-        else:
-            # Update existing profile if it exists
-            if hasattr(instance, 'doctor_profile'):
-                instance.doctor_profile.save()
+def create_doctor_profile(sender, instance, created, **kwargs):
+    if created and instance.user_type == 'doctor':
+        print('PROFILE CREATEDDDDDDDDDDDDD')
+        Doctor.objects.create(user=instance)
+
+@receiver(post_save, sender=User)
+def save_doctor_profile(sender, instance, **kwargs):
+    if hasattr(instance, 'doctor_profile'):
+        instance.doctor_profile.save()
