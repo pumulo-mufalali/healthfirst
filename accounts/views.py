@@ -11,9 +11,13 @@ from patients.models import Patient
 def home(request):
     return render(request, 'accounts/home.html')
 
-@admin_only
+# @admin_only
 def dashboard(request):
-    return render(request, 'accounts/dashboard.html')
+    total_patients = Patient.objects.all().count()
+    context = {
+        'total_patients':total_patients,
+    }
+    return render(request, 'accounts/dashboard.html', context)
 
 @unauthorized_user
 def loginPage(request):
