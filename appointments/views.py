@@ -81,6 +81,67 @@ def appointment_create(request):
     return render(request, 'appointments/form.html', context)
 
 
+
+def add_prescription(request, appointment_pk):
+    appointment = get_object_or_404(Appointment, pk=appointment_pk)
+    
+    # Check permission - only doctors and staff can add prescriptions
+    if not (request.user.is_staff or hasattr(request.user, 'doctor_profile')):
+        messages.error(request, "Only authorized medical staff can add prescriptions")
+        return redirect('appointments:detail', pk=appointment_pk)
+    
+    if request.method == 'POST':
+        form = PrescriptionForm(request.POST)
+        if form.is_valid():
+            prescription = form.save(commit=False)
+            prescription.appointment = appointment
+            prescription.prescribed_by = request.user.doctor_profile if hasattr(request.user, 'doctor_profile') else None
+            prescription.save()
+            messages.success(request, 'Prescription added successfully')
+            return redirect('appointments:detail', pk=appointment_pk)
+    else:
+        form = PrescriptionForm(initial={
+            'prescribed_date': timezone.now().date()
+        })
+    
+    context = {
+        'form': form,
+        'appointment': appointment,
+        'title': 'Add New Prescription'
+    }
+    return render(request, 'appointments/prescription_form.html', context)
+
+
+def add_medical_record(request, appointment_pk):
+    appointment = get_object_or_404(Appointment, pk=appointment_pk)
+    
+    # Check permission - only doctors and staff can add medical records
+    if not (request.user.is_staff or hasattr(request.user, 'doctor_profile')):
+        messages.error(request, "Only authorized medical staff can add medical records")
+        return redirect('appointments:detail', pk=appointment_pk)
+    
+    if request.method == 'POST':
+        form = MedicalRecordForm(request.POST)
+        if form.is_valid():
+            medical_record = form.save(commit=False)
+            medical_record.appointment = appointment
+            medical_record.created_by = request.user.doctor_profile if hasattr(request.user, 'doctor_profile') else None
+            medical_record.save()
+            messages.success(request, 'Medical record added successfully')
+            return redirect('appointments:detail', pk=appointment_pk)
+    else:
+        form = MedicalRecordForm(initial={
+            'created_at': timezone.now()
+        })
+    
+    context = {
+        'form': form,
+        'appointment': appointment,
+        'title': 'Add Medical Record'
+    }
+    return render(request, 'appointments/medical_record_form.html', context)
+
+
 def add_prescription(request, appointment_pk):
     appointment = get_object_or_404(Appointment, pk=appointment_pk)
     

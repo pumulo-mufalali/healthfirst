@@ -4,7 +4,7 @@
 <div class="container">
     <h1 class="my-4">Appointments</h1>
     
-    {% if request.user %}
+    {% if request.user|is_patient %}
     <a href="{% url 'appointments:create' %}" class="btn btn-primary mb-3">Book New Appointment</a>
     {% endif %}
     

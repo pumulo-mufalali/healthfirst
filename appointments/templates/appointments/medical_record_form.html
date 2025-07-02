@@ -1,0 +1,51 @@
+{% extends 'accounts/base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="card my-4">
+        <div class="card-header bg-primary text-white">
+            <h2 class="mb-0">{{ title }}</h2>
+        </div>
+        <div class="card-body">
+            <div class="mb-4">
+                <h4>Appointment Details</h4>
+                <p>
+                    <strong>Patient:</strong> {{ appointment.patient.user.get_full_name }}<br>
+                    <strong>Date:</strong> {{ appointment.date }}<br>
+                    <strong>Time:</strong> {{ appointment.start_time|time:"H:i" }} - {{ appointment.end_time|time:"H:i" }}
+                </p>
+            </div>
+            
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    {{ form.diagnosis.label_tag }}
+                    {{ form.diagnosis }}
+                    {% for error in form.diagnosis.errors %}
+                    <div class="invalid-feedback d-block">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                
+                <div class="mb-3">
+                    {{ form.treatment.label_tag }}
+                    {{ form.treatment }}
+                    {% for error in form.treatment.errors %}
+                    <div class="invalid-feedback d-block">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                
+                <div class="mb-3">
+                    {{ form.notes.label_tag }}
+                    {{ form.notes }}
+                    {% for error in form.notes.errors %}
+                    <div class="invalid-feedback d-block">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Save Medical Record</button>
+                <a href="{% url 'appointments:detail' appointment.pk %}" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

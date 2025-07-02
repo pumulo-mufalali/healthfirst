@@ -1,0 +1,72 @@
+{% extends 'accounts/base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="card my-4">
+        <div class="card-header bg-primary text-white">
+            <h2 class="mb-0">{{ title }}</h2>
+        </div>
+        <div class="card-body">
+            <div class="mb-4">
+                <h4>Appointment Details</h4>
+                <p>
+                    <strong>Patient:</strong> {{ appointment.patient.user.get_full_name }}<br>
+                    <strong>Date:</strong> {{ appointment.date }}<br>
+                    <strong>Time:</strong> {{ appointment.start_time|time:"H:i" }} - {{ appointment.end_time|time:"H:i" }}
+                </p>
+            </div>
+            
+            <form method="post">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        {{ form.medication.label_tag }}
+                        {{ form.medication }}
+                        {% if form.medication.help_text %}
+                        <small class="form-text text-muted">{{ form.medication.help_text }}</small>
+                        {% endif %}
+                        {% for error in form.medication.errors %}
+                        <div class="invalid-feedback d-block">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        {{ form.dosage.label_tag }}
+                        {{ form.dosage }}
+                        {% for error in form.dosage.errors %}
+                        <div class="invalid-feedback d-block">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    {{ form.instructions.label_tag }}
+                    {{ form.instructions }}
+                    {% for error in form.instructions.errors %}
+                    <div class="invalid-feedback d-block">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        {{ form.refills.label_tag }}
+                        {{ form.refills }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        {{ form.prescribed_date.label_tag }}
+                        {{ form.prescribed_date }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        {{ form.is_active.label_tag }}
+                        <div class="form-check form-switch">
+                            {{ form.is_active }}
+                        </div>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Save Prescription</button>
+                <a href="{% url 'appointments:detail' appointment.pk %}" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
