@@ -19,7 +19,7 @@ def appointment_list(request):
         appointments = Appointment.objects.filter(
             doctor=request.user.doctor_profile
         ).order_by('date', 'start_time')
-    else:  # admin/staff
+    else:
         appointments = Appointment.objects.all().order_by('date', 'start_time')
     
     context = {

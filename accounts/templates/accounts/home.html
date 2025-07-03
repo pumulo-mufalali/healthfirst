@@ -9,13 +9,15 @@
                 <h1 class="display-4 fw-bold mb-4">Advanced Healthcare Management System</h1>
                 <p class="lead mb-4">Streamline your medical practice with our comprehensive solution for patient management, appointment scheduling, and medical records.</p>
                 <div class="d-flex flex-wrap gap-3">
-                    <a href="{% url 'login' %}" class="btn btn-primary btn-lg px-4 py-3">Login to Dashboard</a>
+                    {% if not is_patient %}
+                        <a href="{% url 'login' %}" class="btn btn-primary btn-lg px-4 py-3">Login to Dashboard</a>
+                    {% endif %}
                     <a class="btn btn-outline-primary btn-lg px-4 py-3" href="{% url 'register' %}">Create Account</a>
                 </div>
             </div>
             <div class="col-lg-6">
                 <div class="position-relative">
-                    <img src="{% static 'img/hero-dashboard.png' %}" alt="Healthcare Dashboard" class="img-fluid rounded-4 shadow-lg">
+                    <img src="{% static 'img/IMG_20220309_183425.jpg' %}" alt="Healthcare Dashboard" class="img-fluid rounded-4 shadow-lg">
                     <div class="position-absolute top-0 start-0 mt-n4 ms-n4">
                         <div class="bg-primary p-3 rounded-circle shadow">
                             <i class="fas fa-heartbeat fa-2x text-white"></i>

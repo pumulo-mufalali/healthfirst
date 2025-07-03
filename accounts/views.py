@@ -30,7 +30,7 @@ def loginPage(request):
             login(request, user)
             
             if user.user_type == 'admin':
-                return redirect('#')
+                return redirect('dashboard')
             elif user.user_type == 'doctor':
                 return redirect('doctor_detail')
             elif user.user_type == 'patient':

@@ -17,7 +17,7 @@
 
     <div class="row mb-4">
         <div class="col-12 text-end">
-            {% if request.user %}
+            {% if user_type == 'admin' or 'staff' %}
                 <a href="{% url 'doctors:doctor_create' %}" class="btn btn-success">Add New Doctor</a>
             {% endif %}
         </div>
