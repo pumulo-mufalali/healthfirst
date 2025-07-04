@@ -29,6 +29,7 @@
                     <td>
                         <a href="{% url 'patients:patient_detail' patient.user_id %}" class="btn btn-sm btn-info">View</a>
                         <a href="{% url 'patients:patient_update' patient.user_id %}" class="btn btn-sm btn-warning">Edit</a>
+                        <a href="{% url 'patients:delete_patient' patient.user_id %}" class="btn btn-sm btn-danger">Delete</a>
                     </td>
                 </tr>
                 {% empty %}
