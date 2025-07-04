@@ -63,3 +63,19 @@ def patient_update(request, pk):
     context = {'patient_form': form, 'title': 'Update Patient', 'patient_name':patient_name}
 
     return render(request, 'patients/form.html', context)
+
+def delete_patient(request, pk):
+    patient = Patient.objects.get(user_id=pk)
+    patient_name = patient.user.get_full_name()
+    patient_deleted = None
+    if request.method == 'POST':
+        patient_deleted = patient.delete()
+        return redirect('patients:patient_list')
+
+    context = {
+        'patient_deleted':patient_deleted,
+        'patient_name':patient_name,
+        'title':'Delete Patient'
+    }
+
+    return render(request, 'patients/delete_patient.html', context)

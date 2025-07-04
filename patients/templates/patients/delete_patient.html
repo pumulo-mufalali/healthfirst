@@ -1,0 +1,14 @@
+{% extends 'accounts/base.html' %}
+
+{% block content %}
+
+  <form method="post", action="">
+    <h1>
+      {{title}}
+    </h1>
+    {{form.as_p}}
+    {% csrf_token %}
+    <p>Are you sure You want to delete <strong>{{patient_name}}</strong> ?</p>
+    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+  </form>
+{% endblock %}

@@ -1,16 +1,14 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import Appointment, Prescription, MedicalRecord
+from .models import Appointment
 from .forms import AppointmentForm, PrescriptionForm, MedicalRecordForm, AppointmentStatusForm
-from patients.models import Patient
-from doctors.models import Doctor
 from django.utils import timezone
 from datetime import date
 
 
 def appointment_list(request):
     today = date.today()
+
     if hasattr(request.user, 'patient_profile'):
         appointments = Appointment.objects.filter(
             patient=request.user.patient_profile
