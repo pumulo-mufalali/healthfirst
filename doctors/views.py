@@ -1,20 +1,61 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required, user_passes_test
-from .models import Doctor
+from .models import Doctor, DoctorAvailability
 from django.contrib.auth import get_user_model
 from .form import DoctorForm, DoctorUserForm
+from datetime import date, timedelta
+from appointments.models import Appointment, Prescription
 
 User = get_user_model()
 
 def is_admin_or_staff(user):
     return user.is_authenticated and (user.user_type in ['admin', 'staff'] or user.is_superuser)
 
-# @login_required
+
+def doctor_dashboard(request):
+    doctor = get_object_or_404(Doctor, user=request.user)
+    today = date.today()
+    tomorrow = today + timedelta(days=1)
+    
+
+    todays_appointments = Appointment.objects.filter(
+        doctor=doctor,
+        date=today,
+        status__in=['confirmed', 'pending']
+    ).order_by('start_time')
+    
+    tomorrows_appointments = Appointment.objects.filter(
+        doctor=doctor,
+        date=tomorrow,
+        status__in=['confirmed', 'pending']
+    ).order_by('start_time')
+    
+
+    recent_prescriptions = Prescription.objects.filter(
+        appointment__doctor=doctor
+    ).order_by('-prescribed_date')[:5]
+    
+
+    availability = DoctorAvailability.objects.filter(doctor=doctor)
+    
+    context = {
+        'doctor': doctor,
+        'todays_appointments': todays_appointments,
+        'tomorrows_appointments': tomorrows_appointments,
+        'recent_prescriptions': recent_prescriptions,
+        'availability': availability,
+        'today': today,
+        'tomorrow': tomorrow,
+    }
+    return render(request, 'doctors/dashboard.html', context)
+
+
 def doctor_list(request):
     doctors = Doctor.objects.select_related('user').all()
     return render(request, 'doctors/list.html', {
         'doctors': doctors,
     })
+
 
 # @login_required
 def doctor_detail(request, pk):
@@ -59,7 +100,6 @@ def doctor_update(request, pk):
         form = DoctorForm(request.POST, instance=doctor)
         if form.is_valid():
             form.save()
-            print('YA BITCHHHHHHH')
             return redirect('doctors:doctor_detail', pk)
     else:
         form = DoctorForm(instance=doctor)

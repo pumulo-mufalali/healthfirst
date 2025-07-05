@@ -1,0 +1,366 @@
+{% extends 'accounts/base.html' %}
+
+{% load static %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3 col-lg-2 bg-light sidebar">
+            <div class="text-center my-4">
+                {% if doctor.user.profile_picture %}
+                    <img src="{{ doctor.user.profile_picture.url }}" class="rounded-circle mb-3" width="120" height="120">
+                {% else %}
+                    <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center mb-3" 
+                         style="width:120px;height:120px;margin:0 auto;">
+                        <span class="text-white fs-4">DR</span>
+                    </div>
+                {% endif %}
+                <h4>Dr. {{ doctor.user.last_name }}</h4>
+                <p class="text-muted">{{ doctor.get_specialization_display }}</p>
+                <div class="rating mb-2">
+                    {% for i in "12345" %}
+                        {% if forloop.counter <= doctor.average_rating %}
+                            <i class="fas fa-star text-warning"></i>
+                        {% else %}
+                            <i class="far fa-star text-warning"></i>
+                        {% endif %}
+                    {% endfor %}
+                    <span class="ms-1">({{ doctor.average_rating|default:"0" }})</span>
+                </div>
+            </div>
+            
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#">
+                        <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'doctors:doctor_update' doctor.id %}">
+                        <i class="fas fa-user-md me-2"></i>My Profile
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'appointments:list' %}">
+                        <i class="fas fa-calendar-check me-2"></i>Appointments
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <i class="fas fa-prescription me-2"></i>Prescriptions
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <i class="fas fa-calendar-plus me-2"></i>Availability
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <i class="fas fa-chart-line me-2"></i>Statistics
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-9 col-lg-10 ms-sm-auto px-4 py-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">Doctor Dashboard</h1>
+                <div class="btn-toolbar mb-2 mb-md-0">
+                    <div class="btn-group me-2">
+                        <button type="button" class="btn btn-sm btn-outline-secondary">
+                            <i class="fas fa-calendar me-1"></i> Calendar View
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary">
+                            <i class="fas fa-sliders-h me-1"></i> Settings
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Summary Cards -->
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <div class="card text-white bg-primary mb-3">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h5 class="card-title">Today's Appointments</h5>
+                                    <h2 class="mb-0">{{ todays_appointments.count }}</h2>
+                                </div>
+                                <i class="fas fa-calendar-day fa-3x opacity-50"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="card text-white bg-success mb-3">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h5 class="card-title">Tomorrow's Appointments</h5>
+                                    <h2 class="mb-0">{{ tomorrows_appointments.count }}</h2>
+                                </div>
+                                <i class="fas fa-calendar-alt fa-3x opacity-50"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="card text-white bg-info mb-3">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h5 class="card-title">Consultation Fee</h5>
+                                    <h2 class="mb-0">${{ doctor.consultation_fee|default:"0" }}</h2>
+                                </div>
+                                <i class="fas fa-dollar-sign fa-3x opacity-50"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Appointments Section -->
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card mb-4">
+                        <div class="card-header bg-warning text-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-calendar-day me-2"></i>Today's Schedule
+                                <span class="badge bg-light text-dark float-end">{{ todays_appointments.count }}</span>
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            {% if todays_appointments %}
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Time</th>
+                                                <th>Patient</th>
+                                                <th>Type</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for appointment in todays_appointments %}
+                                            <tr>
+                                                <td>{{ appointment.start_time|time:"H:i" }}</td>
+                                                <td>
+                                                    <a href="{% url 'appointments:detail' appointment.id %}">
+                                                        {{ appointment.patient.user.get_full_name }}
+                                                    </a>
+                                                </td>
+                                                <td>{{ appointment.get_appointment_type_display }}</td>
+                                                <td>
+                                                    <span class="badge bg-{% if appointment.status == 'confirmed' %}success{% else %}warning{% endif %}">
+                                                        {{ appointment.get_status_display }}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            {% else %}
+                                <div class="text-center py-4">
+                                    <i class="fas fa-calendar-times fa-3x text-muted mb-3"></i>
+                                    <h5>No appointments scheduled for today</h5>
+                                    <p class="text-muted">Enjoy your day!</p>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="card mb-4">
+                        <div class="card-header bg-info text-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-calendar-alt me-2"></i>Tomorrow's Schedule
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            {% if tomorrows_appointments %}
+                                <div class="list-group">
+                                    {% for appointment in tomorrows_appointments %}
+                                    <a href="{% url 'appointments:detail' appointment.id %}" 
+                                       class="list-group-item list-group-item-action">
+                                        <div class="d-flex w-100 justify-content-between">
+                                            <h6 class="mb-1">{{ appointment.patient.user.get_full_name }}</h6>
+                                            <small>{{ appointment.start_time|time:"H:i" }}</small>
+                                        </div>
+                                        <p class="mb-1">
+                                            {{ appointment.reason|truncatechars:50 }}
+                                        </p>
+                                        <small>
+                                            <span class="badge bg-{% if appointment.appointment_type == 'in_person' %}primary{% else %}success{% endif %}">
+                                                {{ appointment.get_appointment_type_display }}
+                                            </span>
+                                        </small>
+                                    </a>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <div class="text-center py-4">
+                                    <i class="fas fa-calendar-plus fa-3x text-muted mb-3"></i>
+                                    <h5>No appointments scheduled for tomorrow</h5>
+                                    <a href="#" class="btn btn-sm btn-info mt-2">
+                                        <i class="fas fa-bullhorn me-1"></i> Promote Availability
+                                    </a>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Bottom Row -->
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-pills me-2"></i>Recent Prescriptions
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            {% if recent_prescriptions %}
+                                <div class="list-group">
+                                    {% for prescription in recent_prescriptions %}
+                                    <div class="list-group-item">
+                                        <div class="d-flex w-100 justify-content-between">
+                                            <h6 class="mb-1">{{ prescription.medication }}</h6>
+                                            <small>{{ prescription.prescribed_date }}</small>
+                                        </div>
+                                        <p class="mb-1">
+                                            <strong>Patient:</strong> 
+                                            <a href="{% url 'appointments:detail' prescription.appointment.id %}">
+                                                {{ prescription.appointment.patient.user.get_full_name }}
+                                            </a>
+                                        </p>
+                                        <small class="text-muted">
+                                            {{ prescription.dosage }} • {{ prescription.instructions|truncatechars:30 }}
+                                        </small>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                <a href="#" class="btn btn-sm btn-outline-success mt-3">View All</a>
+                            {% else %}
+                                <div class="text-center py-4">
+                                    <i class="fas fa-prescription-bottle-alt fa-3x text-muted mb-3"></i>
+                                    <h5>No recent prescriptions</h5>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header bg-secondary text-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-clock me-2"></i>Your Availability
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            {% if availability %}
+                                <div class="table-responsive">
+                                    <table class="table table-sm">
+                                        <thead>
+                                            <tr>
+                                                <th>Day</th>
+                                                <th>Availability</th>
+                                                <th>Hours</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for avail in availability %}
+                                            <tr>
+                                                <td>{{ avail.get_day_display }}</td>
+                                                <td>
+                                                    <span class="badge bg-{% if avail.is_available %}success{% else %}danger{% endif %}">
+                                                        {% if avail.is_available %}Available{% else %}Unavailable{% endif %}
+                                                    </span>
+                                                </td>
+                                                <td>{{ avail.start_time|time:"H:i" }} - {{ avail.end_time|time:"H:i" }}</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <a href="#" class="btn btn-sm btn-outline-secondary">Update Availability</a>
+                            {% else %}
+                                <div class="text-center py-4">
+                                    <i class="fas fa-calendar-times fa-3x text-muted mb-3"></i>
+                                    <h5>No availability set</h5>
+                                    <p class="text-muted">Patients can't book appointments until you set your availability</p>
+                                    <a href="#" class="btn btn-sm btn-secondary">
+                                        <i class="fas fa-plus me-1"></i> Set Availability
+                                    </a>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block styles %}
+<style>
+    .sidebar {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 100;
+        padding: 48px 0 0;
+        box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+    }
+    
+    .nav-link {
+        font-weight: 500;
+        color: #333;
+        padding: 0.75rem 1rem;
+        border-left: 4px solid transparent;
+    }
+    
+    .nav-link.active {
+        color: #0d6efd;
+        background-color: rgba(13, 110, 253, 0.1);
+        border-left: 4px solid #0d6efd;
+    }
+    
+    .nav-link:hover {
+        color: #0d6efd;
+        background-color: rgba(13, 110, 253, 0.1);
+    }
+    
+    .main-content {
+        margin-left: 280px;
+    }
+    
+    @media (max-width: 767.98px) {
+        .sidebar {
+            position: static;
+            padding: 0;
+        }
+        
+        .main-content {
+            margin-left: 0;
+        }
+    }
+    
+    .rating {
+        font-size: 0.9rem;
+    }
+</style>
+{% endblock %}

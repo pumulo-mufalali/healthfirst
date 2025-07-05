@@ -3,8 +3,43 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from .models import Patient
 from .forms import PatientForm, PatientUserForm
 from django.contrib.auth import get_user_model
+from datetime import date
+from appointments.models import Appointment
 
 User = get_user_model()
+
+def patient_dashboard(request):
+    patient = get_object_or_404(Patient, user=request.user)
+    today = date.today()
+    
+    # Get upcoming and past appointments
+    appointments = Appointment.objects.filter(patient=patient).order_by('date', 'start_time')
+    upcoming_appointments = appointments.filter(date__gte=today)[:3]
+    past_appointments = appointments.filter(date__lt=today)[:3]
+    
+    # Calculate BMI if height and weight are available
+    bmi = None
+    if patient.weight and patient.height:
+        try:
+            # Convert height from feet'inches" to meters if needed
+            if "'" in patient.height:
+                feet, inches = patient.height.split("'")
+                height_m = (float(feet) * 0.3048) + (float(inches.strip('"')) * 0.0254)
+            else:
+                height_m = float(patient.height) / 100  # assuming cm if no feet/inches
+            
+            bmi = round(float(patient.weight) / (height_m ** 2), 1)
+        except:
+            pass
+    
+    context = {
+        'patient': patient,
+        'upcoming_appointments': upcoming_appointments,
+        'past_appointments': past_appointments,
+        'bmi': bmi,
+        'today': today,
+    }
+    return render(request, 'patients/dashboard.html', context)
 
 def is_admin_or_staff(user):
     return user.is_authenticated and (user.user_type in ['admin', 'staff'] or user.is_superuser)
