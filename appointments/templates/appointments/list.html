@@ -8,8 +8,9 @@
         <a href="{% url 'appointments:create' %}" class="btn btn-primary mb-3">Book New Appointment</a>
     {% endif %}
     
-    <h3>Upcoming Appointments</h3>
-    {% if upcoming %}
+
+    {% if today %}
+        <h3>Today's Appointments</h3>
         <div class="table-responsive">
             <table class="table table-striped">
                 <thead>
@@ -23,57 +24,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for appointment in upcoming %}
-                    <tr>
-                        <td>{{ appointment.date }}</td>
-                        <td>{{ appointment.start_time|time:"H:i" }} - {{ appointment.end_time|time:"H:i" }}</td>
-                        <td>
-                            {% if request.user %}
-                            {{ appointment.patient.user.get_full_name }}
-                            {% else %}
-                            Dr. {{ appointment.doctor.user.last_name }}
-                            {% endif %}
-                        </td>
-                        <td>{{ appointment.get_appointment_type_display }}</td>
-                        <td>
-                            <span class="badge 
-                                {% if appointment.status == 'confirmed' %}bg-success
-                                {% elif appointment.status == 'completed' %}bg-secondary
-                                {% elif appointment.status == 'cancelled' %}bg-danger
-                                {% else %}bg-warning{% endif %}">
-                                {{ appointment.get_status_display }}
-                            </span>
-                        </td>
-                        <td>
-                            <a href="{% url 'appointments:detail' appointment.pk %}" class="btn btn-sm btn-info">View</a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    {% else %}
-        <div class="alert alert-info">No upcoming appointments</div>
-    {% endif %}
-    
-    <h3 class="mt-5">Past Appointments</h3>
-    {% if past %}
-            <div class="table-responsive">
-                <table class="table table-striped">
-                    <div class="table-responsive">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Time</th>
-                            <th>{% if request.user %}Patient{% else %}Doctor{% endif %}</th>
-                            <th>Type</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for appointment in upcoming %}
+                    {% for appointment in today %}
                         <tr>
                             <td>{{ appointment.date }}</td>
                             <td>{{ appointment.start_time|time:"H:i" }} - {{ appointment.end_time|time:"H:i" }}</td>
@@ -98,19 +49,110 @@
                                 <a href="{% url 'appointments:detail' appointment.pk %}" class="btn btn-sm btn-info">View</a>
                             </td>
                         </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-            {% for appointment in past %}
-            <!-- Same row structure -->
-            {% endfor %}
-        </table>
-    </div>
-
-    
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     {% else %}
-    <div class="alert alert-info">No past appointments</div>
+        <div class="alert alert-info">No appointments today</div>
+    {% endif %}
+
+
+    {% if upcoming %}
+        <h3>Upcoming Appointments</h3>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>{% if request.user %}Patient{% else %}Doctor{% endif %}</th>
+                        <th>Type</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for appointment in upcoming %}
+                        <tr>
+                            <td>{{ appointment.date }}</td>
+                            <td>{{ appointment.start_time|time:"H:i" }} - {{ appointment.end_time|time:"H:i" }}</td>
+                            <td>
+                                {% if request.user %}
+                                {{ appointment.patient.user.get_full_name }}
+                                {% else %}
+                                Dr. {{ appointment.doctor.user.last_name }}
+                                {% endif %}
+                            </td>
+                            <td>{{ appointment.get_appointment_type_display }}</td>
+                            <td>
+                                <span class="badge 
+                                    {% if appointment.status == 'confirmed' %}bg-success
+                                    {% elif appointment.status == 'completed' %}bg-secondary
+                                    {% elif appointment.status == 'cancelled' %}bg-danger
+                                    {% else %}bg-warning{% endif %}">
+                                    {{ appointment.get_status_display }}
+                                </span>
+                            </td>
+                            <td>
+                                <a href="{% url 'appointments:detail' appointment.pk %}" class="btn btn-sm btn-info">View</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="alert alert-info">No upcoming appointments</div>
+    {% endif %}
+    
+
+    {% if past %}
+        <h3 class="mt-5">Past Appointments</h3>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>{% if request.user %}Patient{% else %}Doctor{% endif %}</th>
+                        <th>Type</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for appointment in past %}
+                        <tr>
+                            <td>{{ appointment.date }}</td>
+                            <td>{{ appointment.start_time|time:"H:i" }} - {{ appointment.end_time|time:"H:i" }}</td>
+                            <td>
+                                {% if request.user %}
+                                {{ appointment.patient.user.get_full_name }}
+                                {% else %}
+                                Dr. {{ appointment.doctor.user.last_name }}
+                                {% endif %}
+                            </td>
+                            <td>{{ appointment.get_appointment_type_display }}</td>
+                            <td>
+                                <span class="badge 
+                                    {% if appointment.status == 'confirmed' %}bg-success
+                                    {% elif appointment.status == 'completed' %}bg-secondary
+                                    {% elif appointment.status == 'cancelled' %}bg-danger
+                                    {% else %}bg-warning{% endif %}">
+                                    {{ appointment.get_status_display }}
+                                </span>
+                            </td>
+                            <td>
+                                <a href="{% url 'appointments:detail' appointment.pk %}" class="btn btn-sm btn-info">View</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="alert alert-info">No past appointments</div>
     {% endif %}
 </div>
 {% endblock %}

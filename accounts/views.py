@@ -6,7 +6,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from .forms import UserRegistrationForm, UserProfileForm
 from patients.models import Patient
 from appointments.models import Appointment
-from datetime import date
+from datetime import date as today_date
 
 
 def home(request):
@@ -16,20 +16,23 @@ def home(request):
 # @allowed_user('staff')
 # @admin_only
 def dashboard(request):
-    todays_date = date.today
+    today = today_date.today()
     
-    appointment = Appointment.objects.all()
-    
-    todays_appointments = Appointment.objects.filter(date=todays_date)
-    total_appointment = appointment.count()
+    appointments = Appointment.objects.all()
+    todays_appointment = appointments.filter(date=today).count
+    total_appointment = appointments.count()
 
-    total_patients = Patient.objects.all().count()
+    total_patients = Patient.objects.count()
+
     context = {
-        'total_patients':total_patients,
+        'appointments':appointments,
         'total_appointment':total_appointment,
-        'todays_appointments':todays_appointments,
+        'todays_appointment':todays_appointment,
+
+        'total_patients':total_patients,
     }
     return render(request, 'accounts/dashboard.html', context)
+
 
 @unauthorized_user
 def loginPage(request):
