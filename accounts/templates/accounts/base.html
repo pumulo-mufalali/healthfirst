@@ -24,10 +24,10 @@
                         </li>
                     {% else %}
                         <li class="nav-item">
-                            {% if user.user_type == patient.user %}
-                                <a class="nav-link" href="{% url 'patients:patient_list' %}">Dashboard</a>
-                            {% elif user.user_type == doctor.user %}
-                                <a class="nav-link" href="{% url 'doctors:doctor_list' %}">Dashboard</a>
+                            {% if user.user_type == 'patient' %}
+                                <a class="nav-link" href="{% url 'patients:patient_dashboard' %}">Dashboard</a>
+                            {% elif user.user_type == 'doctor' %}
+                                <a class="nav-link" href="{% url 'doctors:doctor_dashboard' %}">Dashboard</a>
                             {% else %}
                                 <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a>
                             {% endif %}

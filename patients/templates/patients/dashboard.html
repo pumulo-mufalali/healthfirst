@@ -1,0 +1,266 @@
+{% extends 'accounts/base.html' %}
+
+{% load static %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3 col-lg-2 bg-light sidebar">
+            <div class="text-center my-4">
+                {% if patient.user.profile_picture %}
+                    <img src="{{ patient.user.profile_picture.url }}" class="rounded-circle mb-3" width="120" height="120">
+                {% else %}
+                    <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center mb-3" style="width:120px;height:120px;margin:0 auto;">
+                        <span class="text-white">{{ patient.user.get_initials }}</span>
+                    </div>
+                {% endif %}
+                <h4>{{ patient.user.get_full_name }}</h4>
+                <p class="text-muted">Patient ID: {{ patient.user.id|stringformat:"06d" }}</p>
+            </div>
+            
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#">
+                        <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'patients:patient_detail' patient.user_id %}">
+                        <i class="fas fa-user-edit me-2"></i>My Profile
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'appointments:list' %}">
+                        <i class="fas fa-calendar-check me-2"></i>Appointments
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <i class="fas fa-prescription me-2"></i>Prescriptions
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <i class="fas fa-file-medical me-2"></i>Medical Records
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-9 col-lg-10 ms-sm-auto px-4 py-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">Patient Dashboard</h1>
+                <div class="btn-toolbar mb-2 mb-md-0">
+                    <a href="{% url 'appointments:create' %}" class="btn btn-primary">
+                        <i class="fas fa-plus me-1"></i> Book Appointment
+                    </a>
+                </div>
+            </div>
+
+            <!-- Health Summary Cards -->
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <div class="card text-white bg-primary mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Personal Info</h5>
+                            <p class="card-text">
+                                <strong>Age:</strong> {% if patient.age %}{{ patient.age }} yrs{% else %}Not specified{% endif %}<br>
+                                <strong>Gender:</strong> {{ patient.get_gender_display|default:"Not specified" }}<br>
+                                <strong>Blood Group:</strong> {{ patient.blood_group|default:"Not specified" }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="card text-white bg-success mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Vital Stats</h5>
+                            <p class="card-text">
+                                <strong>Height:</strong> {{ patient.height|default:"Not specified" }}<br>
+                                <strong>Weight:</strong> {{ patient.weight|default:"Not specified" }} kg<br>
+                                <strong>BMI:</strong> {% if bmi %}{{ bmi }}{% else %}Not calculated{% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="card text-white bg-info mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Emergency Contact</h5>
+                            <p class="card-text">
+                                <strong>Name:</strong> {{ patient.emergency_contact|default:"Not specified" }}<br>
+                                <strong>Phone:</strong> {{ patient.emergency_phone|default:"Not specified" }}<br>
+                                <strong>Insurance:</strong> {{ patient.insurance_provider|default:"None" }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Appointments Section -->
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header bg-warning text-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-calendar-alt me-2"></i>Upcoming Appointments
+                                <span class="badge bg-light text-dark float-end">{{ upcoming_appointments.count }}</span>
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            {% if upcoming_appointments %}
+                                <div class="list-group">
+                                    {% for appointment in upcoming_appointments %}
+                                    <a href="{% url 'appointments:detail' appointment.id %}" class="list-group-item list-group-item-action">
+                                        <div class="d-flex w-100 justify-content-between">
+                                            <h6 class="mb-1">Dr. {{ appointment.doctor.user.last_name }}</h6>
+                                            <small class="text-muted">{{ appointment.date }}</small>
+                                        </div>
+                                        <p class="mb-1">
+                                            {{ appointment.start_time|time:"H:i" }} - {{ appointment.end_time|time:"H:i" }}<br>
+                                            <span class="badge bg-{% if appointment.status == 'confirmed' %}success{% elif appointment.status == 'pending' %}warning{% else %}secondary{% endif %}">
+                                                {{ appointment.get_status_display }}
+                                            </span>
+                                        </p>
+                                        <small>{{ appointment.reason|truncatechars:50 }}</small>
+                                    </a>
+                                    {% endfor %}
+                                </div>
+                                <a href="{% url 'appointments:list' %}" class="btn btn-sm btn-outline-warning mt-3">View All</a>
+                            {% else %}
+                                <p class="text-muted">No upcoming appointments</p>
+                                <a href="{% url 'appointments:create' %}" class="btn btn-sm btn-warning">Book Appointment</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header bg-secondary text-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-history me-2"></i>Recent Appointments
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            {% if past_appointments %}
+                                <div class="list-group">
+                                    {% for appointment in past_appointments %}
+                                    <a href="{% url 'appointments:detail' appointment.id %}" class="list-group-item list-group-item-action">
+                                        <div class="d-flex w-100 justify-content-between">
+                                            <h6 class="mb-1">Dr. {{ appointment.doctor.user.last_name }}</h6>
+                                            <small class="text-muted">{{ appointment.date }}</small>
+                                        </div>
+                                        <p class="mb-1">
+                                            {{ appointment.get_appointment_type_display }}<br>
+                                            <span class="badge bg-{% if appointment.status == 'completed' %}success{% else %}secondary{% endif %}">
+                                                {{ appointment.get_status_display }}
+                                            </span>
+                                        </p>
+                                    </a>
+                                    {% endfor %}
+                                </div>
+                                <a href="{% url 'appointments:list' %}" class="btn btn-sm btn-outline-secondary mt-3">View All</a>
+                            {% else %}
+                                <p class="text-muted">No past appointments</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Medical Information Section -->
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header bg-danger text-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-allergies me-2"></i>Allergies
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            {% if patient.allergies %}
+                                <p>{{ patient.allergies|linebreaks }}</p>
+                                <a href="{% url 'patients:patient_update' patient.id %}" class="btn btn-sm btn-outline-danger">Update</a>
+                            {% else %}
+                                <p class="text-muted">No allergies recorded</p>
+                                <a href="{% url 'patients:patient_update' patient.id %}" class="btn btn-sm btn-danger">Add Allergies</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header bg-dark text-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-notes-medical me-2"></i>Medical History
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            {% if patient.medical_history %}
+                                <p>{{ patient.medical_history|truncatewords:30|linebreaks }}</p>
+                                <a href="{% url 'patients:patient_update' patient.id %}" class="btn btn-sm btn-outline-dark">View Full History</a>
+                            {% else %}
+                                <p class="text-muted">No medical history recorded</p>
+                                <a href="{% url 'patients:patient_update' patient.id %}" class="btn btn-sm btn-dark">Add History</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block styles %}
+<style>
+    .sidebar {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 100;
+        padding: 48px 0 0;
+        box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+    }
+    
+    .nav-link {
+        font-weight: 500;
+        color: #333;
+        padding: 0.75rem 1rem;
+        border-left: 4px solid transparent;
+    }
+    
+    .nav-link.active {
+        color: #0d6efd;
+        background-color: rgba(13, 110, 253, 0.1);
+        border-left: 4px solid #0d6efd;
+    }
+    
+    .nav-link:hover {
+        color: #0d6efd;
+        background-color: rgba(13, 110, 253, 0.1);
+    }
+    
+    .main-content {
+        margin-left: 280px; /* Match sidebar width */
+    }
+    
+    @media (max-width: 767.98px) {
+        .sidebar {
+            position: static;
+            padding: 0;
+        }
+        
+        .main-content {
+            margin-left: 0;
+        }
+    }
+</style>
+{% endblock %}
