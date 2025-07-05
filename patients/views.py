@@ -48,6 +48,10 @@ def is_admin_or_staff(user):
 # @user_passes_test(is_admin_or_staff)
 def patient_list(request):
     patients = Patient.objects.all()
+
+    if hasattr(request.user, 'doctcor_profile'):
+        doctors_patients = Appointment.objects.filter(doctor=request.user.doctor_profile).order_by('date', 'start_time')
+        
     return render(request, 'patients/list.html', {'patients': patients})
 
 
