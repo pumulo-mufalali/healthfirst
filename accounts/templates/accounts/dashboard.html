@@ -52,7 +52,7 @@
                             <div class="text-xs fw-bold text-success text-uppercase mb-1">
                                 Today's Appointments
                             </div>
-                            <div class="h5 mb-0 fw-bold text-gray-800">{{today}}</div>
+                            <div class="h5 mb-0 fw-bold text-gray-800">{{todays_appointment}}</div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-calendar-check fa-2x text-gray-300"></i>
@@ -88,10 +88,10 @@
                             <div class="text-xs fw-bold text-warning text-uppercase mb-1">
                                 Revenue (Monthly)
                             </div>
-                            <div class="h5 mb-0 fw-bold text-gray-800">$24,560</div>
+                            <div class="h5 mb-0 fw-bold text-gray-800">ZMW 24,560</div>
                         </div>
                         <div class="col-auto">
-                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                            <!-- <i class="fas fa-dollar-sign fa-2x text-gray-300"></i> -->
                         </div>
                     </div>
                 </div>
@@ -133,84 +133,22 @@
                 </div>
                 <div class="card-body">
                     <div class="schedule-list">
-                        
-
-                        {% for patient in patients %}
+                        {% for appointment in appointments %}
                             <div class="d-flex border-bottom pb-3 mb-3">
                                 <div class="flex-shrink-0 me-3">
                                     <div class="bg-primary text-white rounded-circle p-2 text-center" style="width: 40px; height: 40px;">
-                                        9:00
+                                        {{appointment.start_time}}
                                     </div>
                                 </div>
                                 <div class="flex-grow-1">
-                                    <h6 class="fw-bold mb-0">Robert Johnson</h6>
-                                    <p class="mb-0 text-muted">Annual Checkup</p>
+                                    <h6 class="fw-bold mb-0">{{appointment.patient.user.get_full_name}}</h6>
+                                    <p class="mb-0 text-muted">{{appointment.reason}}</p>
                                 </div>
                                 <div class="flex-shrink-0">
-                                    <span class="badge bg-success">Confirmed</span>
+                                    <span class="badge bg-success">{{appointment.status}}</span>
                                 </div>
                             </div>
                         {% endfor %}
-                        
-                        <div class="d-flex border-bottom pb-3 mb-3">
-                            <div class="flex-shrink-0 me-3">
-                                <div class="bg-primary text-white rounded-circle p-2 text-center" style="width: 40px; height: 40px;">
-                                    10:30
-                                </div>
-                            </div>
-                            <div class="flex-grow-1">
-                                <h6 class="fw-bold mb-0">Sarah Williams</h6>
-                                <p class="mb-0 text-muted">Follow-up Consultation</p>
-                            </div>
-                            <div class="flex-shrink-0">
-                                <span class="badge bg-success">Confirmed</span>
-                            </div>
-                        </div>
-                        
-                        <div class="d-flex border-bottom pb-3 mb-3">
-                            <div class="flex-shrink-0 me-3">
-                                <div class="bg-primary text-white rounded-circle p-2 text-center" style="width: 40px; height: 40px;">
-                                    11:15
-                                </div>
-                            </div>
-                            <div class="flex-grow-1">
-                                <h6 class="fw-bold mb-0">Michael Chen</h6>
-                                <p class="mb-0 text-muted">Cardiology Consultation</p>
-                            </div>
-                            <div class="flex-shrink-0">
-                                <span class="badge bg-warning">Pending</span>
-                            </div>
-                        </div>
-                        
-                        <div class="d-flex border-bottom pb-3 mb-3">
-                            <div class="flex-shrink-0 me-3">
-                                <div class="bg-primary text-white rounded-circle p-2 text-center" style="width: 40px; height: 40px;">
-                                    14:00
-                                </div>
-                            </div>
-                            <div class="flex-grow-1">
-                                <h6 class="fw-bold mb-0">Emma Rodriguez</h6>
-                                <p class="mb-0 text-muted">Dermatology Follow-up</p>
-                            </div>
-                            <div class="flex-shrink-0">
-                                <span class="badge bg-success">Confirmed</span>
-                            </div>
-                        </div>
-                        
-                        <div class="d-flex">
-                            <div class="flex-shrink-0 me-3">
-                                <div class="bg-primary text-white rounded-circle p-2 text-center" style="width: 40px; height: 40px;">
-                                    15:30
-                                </div>
-                            </div>
-                            <div class="flex-grow-1">
-                                <h6 class="fw-bold mb-0">James Wilson</h6>
-                                <p class="mb-0 text-muted">New Patient Registration</p>
-                            </div>
-                            <div class="flex-shrink-0">
-                                <span class="badge bg-success">Confirmed</span>
-                            </div>
-                        </div>
                     </div>
                     
                     <div class="text-center mt-4">

@@ -3,11 +3,13 @@ from django.contrib import messages
 from .models import Appointment
 from .forms import AppointmentForm, PrescriptionForm, MedicalRecordForm, AppointmentStatusForm
 from django.utils import timezone
-from datetime import date
+from datetime import date as today_date
 
 
 def appointment_list(request):
-    today = date.today()
+    today = today_date.today()
+
+    todays_appointment = Appointment.objects.filter(date=today)
 
     if hasattr(request.user, 'patient_profile'):
         appointments = Appointment.objects.filter(
@@ -21,7 +23,7 @@ def appointment_list(request):
         appointments = Appointment.objects.all().order_by('date', 'start_time')
     
     context = {
-        'today': today,
+        'today': todays_appointment,
         'upcoming': appointments.filter(date__gte=today),
         'past': appointments.filter(date__lt=today),
     }
