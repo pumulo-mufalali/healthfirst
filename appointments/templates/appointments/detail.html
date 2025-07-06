@@ -1,118 +1,126 @@
 {% extends 'accounts/base.html' %}
 
+{% load static %}
+
 {% block content %}
-<div class="container">
-    <div class="card my-4">
-        <div class="card-header bg-primary text-white">
-            <h2 class="mb-0">Appointment Details</h2>
-        </div>
-        <div class="card-body">
-            <div class="row mb-4">
-                <div class="col-md-6">
-                    <h4>Appointment Information</h4>
-                    <p>
-                        <strong>Date:</strong> {{ appointment.date }}<br>
-                        <strong>Time:</strong> {{ appointment.start_time|time:"H:i" }} - {{ appointment.end_time|time:"H:i" }}<br>
-                        <strong>Type:</strong> {{ appointment.get_appointment_type_display }}<br>
-                        <strong>Status:</strong> 
-                        <span class="badge 
-                            {% if appointment.status == 'confirmed' %}bg-success
-                            {% elif appointment.status == 'completed' %}bg-secondary
-                            {% elif appointment.status == 'cancelled' %}bg-danger
-                            {% else %}bg-warning{% endif %}">
-                            {{appointment.get_status_display}}
-                        </span>
-                    </p>
-                    <p><strong>Reason:</strong> {{ appointment.reason }}</p>
-                </div>
-                <div class="col-md-6">
-                    <h4>{% if request.user %}Patient{% else %}Doctor{% endif %} Information</h4>
-                    <p>
-                        {% if request.user %}
-                            <strong>Patient:</strong> {{ appointment.patient.user.get_full_name }}<br>
-                            <strong>Phone:</strong> {{ appointment.patient.user.phone }}<br>
-                            <strong>Email:</strong> {{ appointment.patient.user.email }}
-                        {% else %}
-                            <strong>Doctor:</strong> Dr. {{ appointment.doctor.user.last_name }}<br>
-                            <strong>Specialization:</strong> {{ appointment.doctor.get_specialization_display }}<br>
-                            <strong>Hospital:</strong> {{ appointment.doctor.hospital }}
-                        {% endif %}
-                    </p>
-                </div>
+    <div class="container">
+        <div class="card my-4">
+            <div class="card-header bg-primary text-white">
+                <h2 class="mb-0">Appointment Details</h2>
             </div>
-            
-            {% if request.user.is_staff or request.user.user_type == 'doctor' %}
-            <div class="border p-3 mb-4">
-                <h4>Update Status</h4>
-                <form method="post">
-                    {% csrf_token %}
-                    {{ form.as_p }}
-                    <button type="submit" class="btn btn-primary">Update</button>
-                </form>
-            </div>
-            {% endif %}
-            
-            <div class="row">
-                <div class="col-md-6">
-                    <h4>Prescriptions</h4>
-                    {% if appointment.prescriptions.all %}
-                        <div class="list-group mb-4">
-                            {% for prescription in appointment.prescriptions.all %}
-                            <div class="list-group-item">
-                                <h5>{{ prescription.medication }}</h5>
-                                <p>
-                                    <strong>Dosage:</strong> {{ prescription.dosage }}<br>
-                                    <strong>Instructions:</strong> {{ prescription.instructions }}<br>
-                                    <strong>Refills:</strong> {{ prescription.refills }}<br>
-                                    <strong>Status:</strong> 
-                                    <span class="badge {% if prescription.is_active %}bg-success{% else %}bg-secondary{% endif %}">
-                                        {% if prescription.is_active %}Active{% else %}Inactive{% endif %}
-                                    </span>
-                                </p>
-                            </div>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        <p class="text-muted">No prescriptions</p>
-                    {% endif %}
-                    
-                    {% if request.user.is_staff or request.user.user_type == 'doctor' %}
-                        <a href="{% url 'appointments:add_prescription' appointment.pk %}" class="btn btn-sm btn-success">
-                            Add Prescription
-                        </a>
-                    {% endif %}
+            <div class="card-body">
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <h4>Appointment Information</h4>
+                        <p>
+                            <strong>Date:</strong> {{ appointment.date }}<br>
+                            <strong>Time:</strong> {{ appointment.start_time|time:"H:i" }} - {{ appointment.end_time|time:"H:i" }}<br>
+                            <strong>Type:</strong> {{ appointment.get_appointment_type_display }}<br>
+                            <strong>Status:</strong> 
+                            <span class="badge 
+                                {% if appointment.status == 'confirmed' %}bg-success
+                                {% elif appointment.status == 'completed' %}bg-secondary
+                                {% elif appointment.status == 'cancelled' %}bg-danger
+                                {% else %}bg-warning{% endif %}">
+                                {{appointment.get_status_display}}
+                            </span>
+                        </p>
+                        <p><strong>Reason:</strong> {{ appointment.reason }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h4>{% if request.user %}Patient{% else %}Doctor{% endif %} Information</h4>
+                        <p>
+                            {% if request.user %}
+                                <strong>Patient:</strong> {{ appointment.patient.user.get_full_name }}<br>
+                                <strong>Phone:</strong> {{ appointment.patient.user.phone }}<br>
+                                <strong>Email:</strong> {{ appointment.patient.user.email }}
+                            {% else %}
+                                <strong>Doctor:</strong> Dr. {{ appointment.doctor.user.last_name }}<br>
+                                <strong>Specialization:</strong> {{ appointment.doctor.get_specialization_display }}<br>
+                                <strong>Hospital:</strong> {{ appointment.doctor.hospital }}
+                            {% endif %}
+                        </p>
+                    </div>
                 </div>
                 
-                <div class="col-md-6">
-                    <h4>Medical Records</h4>
-                    {% if appointment.medical_records.all %}
-                        <div class="list-group">
-                            {% for record in appointment.medical_records.all %}
-                            <div class="list-group-item">
-                                <h5>Record from {{ record.created_at|date }}</h5>
-                                <p>
-                                    <strong>Diagnosis:</strong> {{ record.diagnosis }}<br>
-                                    <strong>Treatment:</strong> {{ record.treatment }}<br>
-                                    {% if record.notes %}<strong>Notes:</strong> {{ record.notes }}{% endif %}
-                                </p>
+                {% if request.user.is_staff or request.user.user_type == 'doctor' %}
+                <div class="border p-3 mb-4">
+                    <h4>Update Status</h4>
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit" class="btn btn-primary">Update</button>
+                    </form>
+                </div>
+                {% endif %}
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4>Prescriptions</h4>
+                        {% if appointment.prescriptions.all %}
+                            <div class="list-group mb-4">
+                                {% for prescription in appointment.prescriptions.all %}
+                                <div class="list-group-item">
+                                    <h5>{{ prescription.medication }}</h5>
+                                    <p>
+                                        <strong>Dosage:</strong> {{ prescription.dosage }}<br>
+                                        <strong>Instructions:</strong> {{ prescription.instructions }}<br>
+                                        <strong>Refills:</strong> {{ prescription.refills }}<br>
+                                        <strong>Status:</strong> 
+                                        <span class="badge {% if prescription.is_active %}bg-success{% else %}bg-secondary{% endif %}">
+                                            {% if prescription.is_active %}Active{% else %}Inactive{% endif %}
+                                        </span>
+                                    </p>
+                                </div>
+                                {% endfor %}
                             </div>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        <p class="text-muted">No medical records</p>
-                    {% endif %}
+                        {% else %}
+                            <p class="text-muted">No prescriptions</p>
+                        {% endif %}
+                        
+                        {% if request.user.is_staff or request.user.user_type == 'doctor' %}
+                            <a href="{% url 'appointments:add_prescription' appointment.pk %}" class="btn btn-sm btn-success">
+                                Add Prescription
+                            </a>
+                        {% endif %}
+                    </div>
                     
-                    {% if request.user.is_staff or request.user.user_type == 'doctor' %}
-                        <a href="{% url 'appointments:add_medical_record' appointment.pk %}" class="btn btn-sm btn-success mt-2">
-                            Add Medical Record
-                        </a>
-                    {% endif %}
+                    <div class="col-md-6">
+                        <h4>Medical Records</h4>
+                        {% if appointment.medical_records.all %}
+                            <div class="list-group">
+                                {% for record in appointment.medical_records.all %}
+                                <div class="list-group-item">
+                                    <h5>Record from {{ record.created_at|date }}</h5>
+                                    <p>
+                                        <strong>Diagnosis:</strong> {{ record.diagnosis }}<br>
+                                        <strong>Treatment:</strong> {{ record.treatment }}<br>
+                                        {% if record.notes %}<strong>Notes:</strong> {{ record.notes }}{% endif %}
+                                    </p>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <p class="text-muted">No medical records</p>
+                        {% endif %}
+                        
+                        {% if request.user.is_staff or request.user.user_type == 'doctor' %}
+                            <a href="{% url 'appointments:add_medical_record' appointment.pk %}" class="btn btn-sm btn-success mt-2">
+                                Add Medical Record
+                            </a>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="card-footer">
-            <a href="{% url 'appointments:list' %}" class="btn btn-secondary">Back to List</a>
+            <div class="card-footer">
+                {% if user.user_type == 'doctor' %}
+                    <a href="{% url 'doctors:doctor_dashboard' %}" class="btn btn-secondary">Back to Profile</a>
+                {% elif user.user_type == 'patient' %}
+                    <a href="{% url 'patients:patient_dashboard' %}" class="btn btn-secondary">Back to Profile</a>
+                {% else %}
+                    <a href="{% url 'appointments:list' %}" class="btn btn-secondary">Back to List</a>
+                {% endif %}
+            </div>
         </div>
     </div>
-</div>
 {% endblock %}
