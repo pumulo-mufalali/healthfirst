@@ -14,14 +14,14 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
         <div class="container">
-            <a class="navbar-brand" href="{% url 'home' %}">
+            <a class="navbar-brand" href="{% url 'accounts:home' %}">
                 <i class="fas fa-heartbeat me-2"></i>HealthFirst
             </a>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     {% if not user.is_authenticated %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'home' %}">Home</a>
+                            <a class="nav-link" href="{% url 'accounts:home' %}">Home</a>
                         </li>
                     {% else %}
                         <li class="nav-item">
@@ -29,12 +29,15 @@
                                 <a class="nav-link" href="{% url 'patients:patient_dashboard' %}">Dashboard</a>
                             {% elif user.user_type == 'doctor' %}
                                 <a class="nav-link" href="{% url 'doctors:doctor_dashboard' %}">Dashboard</a>
+                                <li class="nav-item"></li>
+                                    <a class="nav-link" href="{% url 'patients:patient_list' %}">Patients</a>
+                                </li>
                             {% else %}
-                                <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a>
+                                <a class="nav-link" href="{% url 'accounts:dashboard' %}">Dashboard</a>
+                                <li class="nav-item"></li>
+                                    <a class="nav-link" href="{% url 'patients:patient_list' %}">Patients</a>
+                                </li>
                             {% endif %}
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'patients:patient_list' %}">Patients</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'appointments:list' %}">Appointments</a>
@@ -61,15 +64,15 @@
                                 {% endif %}
                             </li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                            <li><a class="dropdown-item" href="{% url 'accounts:logout' %}">Logout</a></li>
                         </ul>
                     </li>
                     {% else %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'login' %}">Login</a>
+                        <a class="nav-link" href="{% url 'accounts:login' %}">Login</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'register' %}">Register</a>
+                        <a class="nav-link" href="{% url 'accounts:register' %}">Register</a>
                     </li>
                     {% endif %}
                 </ul>
@@ -91,7 +94,7 @@
                 <div class="col-md-4 mb-4">
                     <h5>Quick Links</h5>
                     <ul class="list-unstyled">
-                        <li><a href="{% url 'home' %}" class="text-white">Home</a></li>
+                        <li><a href="{% url 'accounts:home' %}" class="text-white">Home</a></li>
                         <li><a href="#" class="text-white">Services</a></li>
                         <li><a href="{% url 'doctors:doctor_list' %}" class="text-white">Doctors</a></li>
                     </ul>

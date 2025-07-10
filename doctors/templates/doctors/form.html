@@ -11,26 +11,50 @@
                 {% csrf_token %}
                 
                 {% if user_form %}
-                <fieldset class="mb-4">
-                    <legend>Account Information</legend>
-                    <div class="row">
-                        {% for field in user_form %}
-                        <div class="col-md-6 mb-3">
-                            {{ field.label_tag }}
-                            {{ field }}
-                            {% if field.help_text %}
-                            <small class="form-text text-muted">{{ field.help_text }}</small>
-                            {% endif %}
-                            {% for error in field.errors %}
-                            <div class="invalid-feedback d-block">{{ error }}</div>
-                            {% endfor %}
-                        </div>
-                        {% endfor %}
-                    </div>
-                </fieldset>
-                <hr>
+                    {% if user_form.fields|length > 1 %}
+                        <!-- Full user creation form -->
+                        <fieldset class="mb-4">
+                            <legend>Account Information</legend>
+                            <div class="row">
+                                {% for field in user_form %}
+                                <div class="col-md-6 mb-3">
+                                    {{ field.label_tag }}
+                                    {{ field }}
+                                    {% if field.help_text %}
+                                    <small class="form-text text-muted">{{ field.help_text }}</small>
+                                    {% endif %}
+                                    {% for error in field.errors %}
+                                    <div class="invalid-feedback d-block">{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </fieldset>
+                        <hr>
+                    {% else %}
+                        <!-- Only profile picture update -->
+                        <fieldset class="mb-4">
+                            <legend>Profile Picture</legend>
+                            <div class="row">
+                                {% for field in user_form %}
+                                <div class="col-md-6 mb-3">
+                                    {{ field.label_tag }}
+                                    {{ field }}
+                                    {% if field.help_text %}
+                                    <small class="form-text text-muted">{{ field.help_text }}</small>
+                                    {% endif %}
+                                    {% for error in field.errors %}
+                                    <div class="invalid-feedback d-block">{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </fieldset>
+                        <hr>
+                    {% endif %}
                 {% endif %}
-                
+
+                <!-- Doctor model form -->
                 <fieldset>
                     <legend>Professional Information</legend>
                     <div class="row">
@@ -48,7 +72,7 @@
                         {% endfor %}
                     </div>
                 </fieldset>
-                
+
                 <div class="mt-4">
                     <button type="submit" class="btn btn-primary">Save</button>
                     <a href="{% if form.instance.pk %}{% url 'doctors:doctor_detail' form.instance.user_id %}{% else %}{% url 'doctors:doctor_list' %}{% endif %}" class="btn btn-secondary">Cancel</a>

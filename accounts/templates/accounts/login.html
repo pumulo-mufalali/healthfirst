@@ -161,7 +161,7 @@
         <form method="post" class="login-form">
             {% csrf_token %}
             
-            {% if form.errors %}
+            {% if error %}
             <div class="alert alert-danger">
                 Invalid username or password. Please try again.
             </div>
@@ -185,7 +185,7 @@
             <button type="submit" class="btn btn-primary btn-login">Sign In</button>
             
             <div class="signup-link">
-                Don't have an account? <a href="{% url 'register' %}">Register here</a>
+                Don't have an account? <a href="{% url 'accounts:register' %}">Register here</a>
             </div>
         </form>
         

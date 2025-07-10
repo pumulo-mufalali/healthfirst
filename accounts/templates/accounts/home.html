@@ -10,9 +10,9 @@
                 <p class="lead mb-4">Streamline your medical practice with our comprehensive solution for patient management, appointment scheduling, and medical records.</p>
                 <div class="d-flex flex-wrap gap-3">
                     {% if not is_patient %}
-                        <a href="{% url 'login' %}" class="btn btn-primary btn-lg px-4 py-3">Login to Dashboard</a>
+                        <a href="{% url 'accounts:login' %}" class="btn btn-primary btn-lg px-4 py-3">Login to Dashboard</a>
                     {% endif %}
-                    <a class="btn btn-outline-primary btn-lg px-4 py-3" href="{% url 'register' %}">Create Account</a>
+                    <a class="btn btn-outline-primary btn-lg px-4 py-3" href="{% url 'accounts:register' %}">Create Account</a>
                 </div>
             </div>
             <div class="col-lg-6">

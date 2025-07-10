@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required, user_passes_test
 from .models import Doctor, DoctorAvailability
 from django.contrib.auth import get_user_model
-from .form import DoctorForm, DoctorUserForm
+from .form import DoctorForm, DoctorUserForm, DoctorUserProfilePictureUpdateForm
 from datetime import date, timedelta
 from appointments.models import Appointment, Prescription
 
@@ -85,7 +85,11 @@ def doctor_create(request):
         user_form = DoctorUserForm()
         doctor_form = DoctorForm()
 
-    context = {'user_form': user_form, 'form': doctor_form, 'title': 'Create Doctor'}
+    context = {
+        'user_form': user_form, 
+        'form': doctor_form, 
+        'title': 'Create Doctor',
+    }
 
     
     return render(request, 'doctors/form.html', context)
@@ -93,17 +97,26 @@ def doctor_create(request):
 # @login_required
 def doctor_update(request, pk):
     doctor = get_object_or_404(Doctor, user_id=pk)
+
     if not (request.user == doctor.user or is_admin_or_staff(request.user)):
         return redirect('home')
-        
+
     if request.method == 'POST':
-        form = DoctorForm(request.POST, instance=doctor)
-        if form.is_valid():
-            form.save()
+        doctor_form = DoctorForm(request.POST, request.FILES, instance=doctor)
+        user_form = DoctorUserProfilePictureUpdateForm(request.POST, request.FILES, instance=request.user)
+
+        if doctor_form.is_valid() and user_form.is_valid():
+            doctor_form.save()
+            user_form.save()
             return redirect('doctors:doctor_detail', pk)
     else:
-        form = DoctorForm(instance=doctor)
+        doctor_form = DoctorForm(instance=doctor)
+        user_form = DoctorUserProfilePictureUpdateForm(instance=request.user)
 
-    context = {'form': form, 'title': 'Update Doctor Profile',}
+    context = {
+        'form': doctor_form,
+        'user_form': user_form,
+        'title': 'Update Doctor Profile',
+    }
 
     return render(request, 'doctors/form.html', context)

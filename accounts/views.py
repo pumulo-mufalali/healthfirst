@@ -1,9 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate
-from .decorators import admin_only, unauthorized_user, allowed_user
-from django.contrib.auth.forms import AuthenticationForm
-from .forms import UserRegistrationForm, UserProfileForm
+from .decorators import unauthorized_user
+from .forms import UserRegistrationForm
 from patients.models import Patient
 from appointments.models import Appointment
 from datetime import date as today_date
@@ -13,8 +12,6 @@ def home(request):
     return render(request, 'accounts/home.html')
 
 
-# @allowed_user('staff')
-# @admin_only
 def dashboard(request):
     today = today_date.today()
     
@@ -34,6 +31,11 @@ def dashboard(request):
     return render(request, 'accounts/dashboard.html', context)
 
 
+def userLogout(request):
+    logout(request)
+    return redirect('accounts:login')
+
+
 @unauthorized_user
 def loginPage(request):
   if request.method == 'POST':
@@ -42,14 +44,14 @@ def loginPage(request):
     user = authenticate(request, username=username, password=password)
     
     if user is not None:
-        # login(request, user)
+        login(request, user)
         
         if user.user_type == 'patient':
             return redirect('patients:patient_list')
         elif user.user_type == 'doctor':
             return redirect('doctors:doctor_list')
         else:
-            return redirect('home')
+            return redirect('accounts:home')
     else:
         return render(request, 'accounts/login.html', {'error': 'Invalid credentials'})
   
@@ -89,9 +91,6 @@ def register(request):
 #         form = AuthenticationForm()
 #     return render(request, 'accounts/login.html', {'form': form})
 
-def user_logout(request):
-    logout(request)
-    return redirect('login')
 
 # @login_required
 # def profile(request):

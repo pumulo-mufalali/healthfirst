@@ -71,15 +71,6 @@ def appointment_detail(request, pk):
 
 
 def appointment_create(request):
-
-    # from django.shortcuts import redirect
-
-    # def confirm_appointment(request, pk):
-    #     appointment = get_object_or_404(Appointment, pk=pk)
-    #     if appointment.status == 'pending':
-    #         return redirect('payments:payment', appointment_id=appointment.id)
-    #     # ... rest of your view
-
     if not hasattr(request.user, 'patient_profile'):
         messages.error(request, "Only patients can book appointments")
         return redirect('appointments:list')

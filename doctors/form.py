@@ -13,7 +13,15 @@ class DoctorUserForm(UserCreationForm):
     
     class Meta:
         model = User
-        fields = ['username', 'first_name', 'last_name', 'email', 'phone', 'password1', 'password2']
+        fields = ['username', 'first_name', 'last_name', 'email', 'phone', 'password1', 'password2',]
+
+
+class DoctorUserProfilePictureUpdateForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['profile_picture']
+        
+
 
 class DoctorForm(forms.ModelForm):
     date_of_birth = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
