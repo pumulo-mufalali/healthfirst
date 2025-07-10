@@ -1,7 +1,6 @@
 from django import forms
 from .models import Appointment, Prescription, MedicalRecord
 from django.contrib.auth import get_user_model
-from django.utils import timezone
 from datetime import date
 
 User = get_user_model()

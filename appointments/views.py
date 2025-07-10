@@ -5,14 +5,14 @@ from .forms import AppointmentForm, PrescriptionForm, MedicalRecordForm, Appoint
 from django.utils import timezone
 from datetime import date as today_date
 
-import stripe
-from django.conf import settings
-from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse, HttpResponse
-from appointments.models import Appointment
-from .models import Payment
+# import stripe
+# from django.conf import settings
+# from django.views.decorators.csrf import csrf_exempt
+# from django.http import JsonResponse, HttpResponse
+# from appointments.models import Appointment
+# from .models import Payment
 
-stripe.api_key = settings.STRIPE_SECRET_KEY
+# stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
 def appointment_list(request):
@@ -211,60 +211,60 @@ def add_medical_record(request, appointment_pk):
     }
     return render(request, 'appointments/medical_record_form.html', context)
 
-# STRIPPPPPPPPPPPPPPPPPPPPPPPPPPP
-def create_payment(request, appointment_id):
-    appointment = Appointment.objects.get(id=appointment_id)
+# STRIPPPPPPPPPPPPPPPPPPPPPPPPPPPEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+# def create_payment(request, appointment_id):
+#     appointment = Appointment.objects.get(id=appointment_id)
     
-    try:
-        payment_intent = stripe.PaymentIntent.create(
-            amount=int(appointment.doctor.consultation_fee * 100),  # in cents
-            currency='usd',
-            metadata={
-                'appointment_id': appointment.id,
-                'patient_id': appointment.patient.id,
-                'doctor_id': appointment.doctor.id
-            }
-        )
+#     try:
+#         payment_intent = stripe.PaymentIntent.create(
+#             amount=int(appointment.doctor.consultation_fee * 100),  # in cents
+#             currency='usd',
+#             metadata={
+#                 'appointment_id': appointment.id,
+#                 'patient_id': appointment.patient.id,
+#                 'doctor_id': appointment.doctor.id
+#             }
+#         )
         
-        # Save payment record
-        payment = Payment.objects.create(
-            appointment=appointment,
-            amount=appointment.doctor.consultation_fee,
-            stripe_payment_intent_id=payment_intent.id,
-            status='pending'
-        )
+#         # Save payment record
+#         payment = Payment.objects.create(
+#             appointment=appointment,
+#             amount=appointment.doctor.consultation_fee,
+#             stripe_payment_intent_id=payment_intent.id,
+#             status='pending'
+#         )
         
-        return JsonResponse({
-            'clientSecret': payment_intent.client_secret
-        })
-    except Exception as e:
-        return JsonResponse({'error': str(e)}, status=400)
+#         return JsonResponse({
+#             'clientSecret': payment_intent.client_secret
+#         })
+#     except Exception as e:
+#         return JsonResponse({'error': str(e)}, status=400)
 
-@csrf_exempt
-def stripe_webhook(request):
-    payload = request.body
-    sig_header = request.META['HTTP_STRIPE_SIGNATURE']
-    event = None
+# @csrf_exempt
+# def stripe_webhook(request):
+#     payload = request.body
+#     sig_header = request.META['HTTP_STRIPE_SIGNATURE']
+#     event = None
 
-    try:
-        event = stripe.Webhook.construct_event(
-            payload, sig_header, settings.STRIPE_WEBHOOK_SECRET
-        )
-    except ValueError as e:
-        return HttpResponse(status=400)
-    except stripe.error.SignatureVerificationError as e:
-        return HttpResponse(status=400)
+#     try:
+#         event = stripe.Webhook.construct_event(
+#             payload, sig_header, settings.STRIPE_WEBHOOK_SECRET
+#         )
+#     except ValueError as e:
+#         return HttpResponse(status=400)
+#     except stripe.error.SignatureVerificationError as e:
+#         return HttpResponse(status=400)
 
-    # Handle payment success
-    if event['type'] == 'payment_intent.succeeded':
-        payment_intent = event['data']['object']
-        payment = Payment.objects.get(stripe_payment_intent_id=payment_intent['id'])
-        payment.status = 'completed'
-        payment.save()
+#     # Handle payment success
+#     if event['type'] == 'payment_intent.succeeded':
+#         payment_intent = event['data']['object']
+#         payment = Payment.objects.get(stripe_payment_intent_id=payment_intent['id'])
+#         payment.status = 'completed'
+#         payment.save()
         
-        # Update appointment status
-        appointment = payment.appointment
-        appointment.status = 'confirmed'
-        appointment.save()
+#         # Update appointment status
+#         appointment = payment.appointment
+#         appointment.status = 'confirmed'
+#         appointment.save()
 
-    return HttpResponse(status=200)
+#     return HttpResponse(status=200)
