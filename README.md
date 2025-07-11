@@ -32,29 +32,3 @@ A modern web-based Hospital Management System built with **Django**, powered by 
 | 🧑 Patient Dashboard | 🥼 Doctor Dashboard | 🧑‍💼 Admin Dashboard |
 |----------------------|---------------------|----------------------|
 | ![Patient](screenshots/Doctor_Profile.png) | ![Doctor](screenshots/Patient_Profile.png) | ![Admin](screenshots/Admin_Dash.png) |
-
----
-
-## 📦 Installation
-
-```bash
-# Clone the project
-git clone https://github.com/yourusername/hms.git
-cd hms
-
-# Set up virtual environment
-python -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Set up PostgreSQL in settings.py or .env
-# Run migrations
-python manage.py migrate
-
-# Create admin user
-python manage.py createsuperuser
-
-# Run server
-python manage.py runserver
