@@ -1,0 +1,49 @@
+{% extends "accounts/base.html" %}
+
+{% block title %}Medical Records{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h4><strong>Doctor:</strong> Dr. {{ user.last_name }}</h4>
+    {% if appointments %}
+        <div class="table-responsive mt-4">
+            <table class="table table-bordered table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        <th>#</th>
+                        <th>Patient</th>
+                        <th>Diagnosis</th>
+                        <th>Treatment</th>
+                        <th>Notes</th>
+                        <th>Created At</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for appointment in appointments %}
+                        {% for record in appointment.medical_records.all %}
+                            <tr>
+                                <td>{{ forloop.parentloop.counter }}.{{ forloop.counter }}</td>
+                                <td>{{ appointment.patient }}</td>
+                                <td>{{ record.diagnosis }}</td>
+                                <td>{{ record.treatment }}</td>
+                                <td>{{ record.notes|default:"—" }}</td>
+                                <td>{{ record.created_at|date:"Y-m-d H:i" }}</td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td>{{ forloop.parentloop.counter }}.{{ forloop.counter }}</td>
+                                <td colspan="6"> Medical record not yet added for <a href="{% url 'appointments:detail' appointment.pk %}">{{ appointment.patient }}</a></td>
+                            </tr>
+                        {% endfor %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <p>Total Appointments: <strong>{{ appointments|length }}</strong></p>
+    {% else %}
+        <div class="alert alert-info mt-4">
+            No medical records found.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

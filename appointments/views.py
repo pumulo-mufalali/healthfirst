@@ -1,9 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from .models import Appointment
+from .models import Appointment, MedicalRecord
 from .forms import AppointmentForm, PrescriptionForm, MedicalRecordForm, AppointmentStatusForm
 from django.utils import timezone
 from datetime import date as today_date
+from doctors.models import Doctor
+
 
 # import stripe
 # from django.conf import settings
@@ -124,11 +126,10 @@ def add_prescription(request, appointment_pk):
 def add_medical_record(request, appointment_pk):
     appointment = get_object_or_404(Appointment, pk=appointment_pk)
     
-    # Check permission - only doctors and staff can add medical records
     if not (request.user.is_staff or hasattr(request.user, 'doctor_profile')):
         messages.error(request, "Only authorized medical staff can add medical records")
         return redirect('appointments:detail', pk=appointment_pk)
-    
+
     if request.method == 'POST':
         form = MedicalRecordForm(request.POST)
         if form.is_valid():
@@ -136,71 +137,32 @@ def add_medical_record(request, appointment_pk):
             medical_record.appointment = appointment
             medical_record.created_by = request.user.doctor_profile if hasattr(request.user, 'doctor_profile') else None
             medical_record.save()
+
             messages.success(request, 'Medical record added successfully')
             return redirect('appointments:detail', pk=appointment_pk)
     else:
         form = MedicalRecordForm(initial={
             'created_at': timezone.now()
         })
-    
+
     context = {
         'form': form,
         'appointment': appointment,
-        'title': 'Add Medical Record'
+        'title': 'Add Medical Record',
     }
     return render(request, 'appointments/medical_record_form.html', context)
 
 
-def add_prescription(request, appointment_pk):
-    appointment = get_object_or_404(Appointment, pk=appointment_pk)
-    
-    if not (request.user.is_staff or hasattr(request.user, 'doctor_profile')):
-        messages.error(request, "Only doctors can add prescriptions")
-        return redirect('appointments:detail', pk=appointment_pk)
-    
-    if request.method == 'POST':
-        form = PrescriptionForm(request.POST)
-        if form.is_valid():
-            prescription = form.save(commit=False)
-            prescription.appointment = appointment
-            prescription.save()
-            messages.success(request, 'Prescription added successfully')
-            return redirect('appointments:detail', pk=appointment_pk)
-    else:
-        form = PrescriptionForm()
-    
-    context = {
-        'form': form,
-        'appointment': appointment,
-        'title': 'Add Prescription'
-    }
-    return render(request, 'appointments/prescription_form.html', context)
+def medical_record_list(request, pk):
 
+    doctor = Doctor.objects.get(user_id=pk)
 
-def add_medical_record(request, appointment_pk):
-    appointment = get_object_or_404(Appointment, pk=appointment_pk)
-    
-    if not (request.user.is_staff or hasattr(request.user, 'doctor_profile')):
-        messages.error(request, "Only doctors can add medical records")
-        return redirect('appointments:detail', pk=appointment_pk)
-    
-    if request.method == 'POST':
-        form = MedicalRecordForm(request.POST)
-        if form.is_valid():
-            medical_record = form.save(commit=False)
-            medical_record.appointment = appointment
-            medical_record.save()
-            messages.success(request, 'Medical record added successfully')
-            return redirect('appointments:detail', pk=appointment_pk)
-    else:
-        form = MedicalRecordForm()
-    
+    appointments = Appointment.objects.filter(doctor_id=doctor.id)
     context = {
-        'form': form,
-        'appointment': appointment,
-        'title': 'Add Medical Record'
+        'appointments': appointments,
     }
-    return render(request, 'appointments/medical_record_form.html', context)
+    return render(request, 'appointments/record_list.html', context)
+
 
 # STRIPPPPPPPPPPPPPPPPPPPPPPPPPPPEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
 # def create_payment(request, appointment_id):

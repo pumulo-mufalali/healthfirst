@@ -37,7 +37,7 @@ class Patient(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     
     def __str__(self):
-        return f"{self.user.get_full_name()} (Patient)"
+        return f"{self.user.get_full_name()}"
     
     @property
     def age(self):

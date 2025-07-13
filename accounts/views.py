@@ -4,7 +4,7 @@ from django.contrib.auth import login, logout, authenticate
 from .decorators import unauthorized_user
 from .forms import UserRegistrationForm
 from patients.models import Patient
-from appointments.models import Appointment
+from appointments.models import Appointment, MedicalRecord
 from datetime import date as today_date
 
 
@@ -21,11 +21,14 @@ def dashboard(request):
 
     total_patients = Patient.objects.count()
 
+    total_record = MedicalRecord.objects.all().count()
+
     context = {
         'appointments':appointments,
         'total_appointment':total_appointment,
         'todays_appointment':todays_appointment,
 
+        'total_medical_record':total_record,
         'total_patients':total_patients,
     }
     return render(request, 'accounts/dashboard.html', context)
@@ -47,11 +50,11 @@ def loginPage(request):
         login(request, user)
         
         if user.user_type == 'patient':
-            return redirect('patients:patient_list')
+            return redirect('patients:patient_dashboard')
         elif user.user_type == 'doctor':
-            return redirect('doctors:doctor_list')
+            return redirect('doctors:doctor_dashboard')
         else:
-            return redirect('accounts:home')
+            return redirect('accounts:dashboard')
     else:
         return render(request, 'accounts/login.html', {'error': 'Invalid credentials'})
   

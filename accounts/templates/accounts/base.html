@@ -26,24 +26,25 @@
                     {% else %}
                         <li class="nav-item">
                             {% if user.user_type == 'patient' %}
-                                <a class="nav-link" href="{% url 'patients:patient_dashboard' %}">Dashboard</a>
-                            {% elif user.user_type == 'doctor' %}
-                                <a class="nav-link" href="{% url 'doctors:doctor_dashboard' %}">Dashboard</a>
-                                <li class="nav-item"></li>
-                                    <a class="nav-link" href="{% url 'patients:patient_list' %}">Patients</a>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'patients:patient_dashboard' %}">Dashboard</a>
                                 </li>
                             {% else %}
-                                <a class="nav-link" href="{% url 'accounts:dashboard' %}">Dashboard</a>
-                                <li class="nav-item"></li>
-                                    <a class="nav-link" href="{% url 'patients:patient_list' %}">Patients</a>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'doctors:doctor_dashboard' %}">Dashboard</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'appointments:list' %}">Appointments</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'appointments:record_list' user.id %}">Medical Records</a>
+                                </li>
+                                {% if user.user_type != 'doctor' %}
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{% url 'patients:patient_list' %}">Patients</a>
+                                    </li>
+                                {% endif %}
                             {% endif %}
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'appointments:list' %}">Appointments</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Medical Records</a>
                         </li>
                     {% endif %}
                 </ul>
