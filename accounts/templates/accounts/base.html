@@ -39,6 +39,9 @@
                                 <li class="nav-item">
                                     <a class="nav-link" href="{% url 'appointments:record_list' user.id %}">Medical Records</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'appointments:doctor_prescriptions' %}">Prescriptions</a>
+                                </li>
                                 {% if user.user_type != 'doctor' %}
                                     <li class="nav-item">
                                         <a class="nav-link" href="{% url 'patients:patient_list' %}">Patients</a>

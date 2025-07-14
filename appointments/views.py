@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from .models import Appointment, MedicalRecord
+from .models import Appointment, MedicalRecord, Prescription
 from .forms import AppointmentForm, PrescriptionForm, MedicalRecordForm, AppointmentStatusForm
 from django.utils import timezone
 from datetime import date as today_date
@@ -163,6 +163,23 @@ def medical_record_list(request, pk):
     }
     return render(request, 'appointments/record_list.html', context)
 
+
+def doctor_prescriptions(request):
+    if not hasattr(request.user, 'doctor_profile'):
+        return render(request, '403.html', status=403)
+
+    doctor = request.user.doctor_profile
+
+    prescriptions = Prescription.objects.select_related(
+        'appointment__patient__user'
+    ).filter(
+        appointment__doctor=doctor
+    ).order_by('-prescribed_date')
+
+    context = {
+        'prescriptions': prescriptions
+    }
+    return render(request, 'appointments/prescriptions.html', context)
 
 # STRIPPPPPPPPPPPPPPPPPPPPPPPPPPPEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
 # def create_payment(request, appointment_id):

@@ -32,8 +32,8 @@
             
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a class="nav-link active" href="#">
-                        <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                    <a class="nav-link active" href="{% url 'appointments:record_list' user.id %}">
+                        <i class="fas fa-tachometer-alt me-2"></i>Medical Records
                     </a>
                 </li>
                 <li class="nav-item">
@@ -47,7 +47,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" href="{% url 'appointments:doctor_prescriptions' %}">
                         <i class="fas fa-prescription me-2"></i>Prescriptions
                     </a>
                 </li>

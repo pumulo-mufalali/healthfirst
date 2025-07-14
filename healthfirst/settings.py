@@ -46,7 +46,6 @@ INSTALLED_APPS = [
     'doctors.apps.DoctorsConfig',
     'appointments.apps.AppointmentsConfig',
 
-    'payments',
     'djstripe',
 
     'django.contrib.sites',

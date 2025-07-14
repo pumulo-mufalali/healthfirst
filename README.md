@@ -29,6 +29,6 @@ A modern web-based Hospital Management System built with **Django**, powered by 
 
 ## 📸 Dashboards
 
-| 🧑 Patient Dashboard | 🥼 Doctor Dashboard | 🧑‍💼 Admin Dashboard |
+|  Patient Dashboard  |  Doctor Dashboard  |  Admin Dashboard  |
 |----------------------|---------------------|----------------------|
-| ![Patient](screenshots/Doctor_Profile.png) | ![Doctor](screenshots/Patient_Profile.png) | ![Admin](screenshots/Admin_Dash.png) |
+| ![Patient](screenshots/Patient_Profile.png) | ![Doctor](screenshots/Doctor_Profile.png) | ![Admin](screenshots/Admin_Dash.png) |
