@@ -88,8 +88,13 @@ WSGI_APPLICATION = 'healthfirst.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'healthfirstdb',
+        'PASSWORD': '1234@post',
+        'USER': 'postgres',
+        'HOST': 'localhost',
+        'PORT': 5432
+
     }
 }
 
