@@ -13,6 +13,7 @@ urlpatterns = [
     path('medical_record_list/<int:pk>/', views.medical_record_list, name='record_list'),
     path('prescriptions/', views.doctor_prescriptions, name='doctor_prescriptions'),
 
-    # path('create-payment/<int:appointment_id>/', views.create_payment, name='create_payment'),
-    # path('stripe-webhook/', views.stripe_webhook, name='stripe_webhook'),
+    path('create-checkout-session/<int:appointment_id>/', views.CreateCheckoutSessionView.as_view(), name='create_checkout_session'),
+    path('payment-success/', views.payment_success, name='payment_success'),
+    path('payment-cancel/', views.payment_cancel, name='payment_cancel'),
 ]

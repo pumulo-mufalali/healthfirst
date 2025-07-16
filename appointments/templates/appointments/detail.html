@@ -82,6 +82,7 @@
                             <a href="{% url 'appointments:add_prescription' appointment.pk %}" class="btn btn-sm btn-success">
                                 Add Prescription
                             </a>
+                            
                         {% endif %}
                     </div>
                     
@@ -109,6 +110,13 @@
                                 Add Medical Record
                             </a>
                         {% endif %}
+                        {% if appointment.status == 'pending' and user.patient_profile == appointment.patient %}
+                            <form method="post" action="{% url 'appointments:create_checkout_session' appointment.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-success">Pay Now</button>
+                            </form>
+                        {% endif %}
+
                     </div>
                 </div>
             </div>

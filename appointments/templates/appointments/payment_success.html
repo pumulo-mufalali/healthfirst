@@ -1,0 +1,9 @@
+{% extends 'accounts/base.html' %}
+
+{% block content %}
+<div class="container mt-5 text-center">
+  <h2 class="text-success">✅ Payment Successful</h2>
+  <p>Your appointment has been confirmed. Thank you for your payment!</p>
+  <a href="{% url 'appointments:list' %}" class="btn btn-primary mt-3">Go to Appointments</a>
+</div>
+{% endblock %}

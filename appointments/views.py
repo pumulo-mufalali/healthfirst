@@ -7,14 +7,12 @@ from datetime import date as today_date
 from doctors.models import Doctor
 
 
-# import stripe
-# from django.conf import settings
-# from django.views.decorators.csrf import csrf_exempt
-# from django.http import JsonResponse, HttpResponse
-# from appointments.models import Appointment
-# from .models import Payment
+import stripe
+from django.conf import settings
+from django.views import View
+from django.http import JsonResponse
 
-# stripe.api_key = settings.STRIPE_SECRET_KEY
+stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
 def appointment_list(request):
@@ -182,59 +180,38 @@ def doctor_prescriptions(request):
     return render(request, 'appointments/prescriptions.html', context)
 
 # STRIPPPPPPPPPPPPPPPPPPPPPPPPPPPEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
-# def create_payment(request, appointment_id):
-#     appointment = Appointment.objects.get(id=appointment_id)
-    
-#     try:
-#         payment_intent = stripe.PaymentIntent.create(
-#             amount=int(appointment.doctor.consultation_fee * 100),  # in cents
-#             currency='usd',
-#             metadata={
-#                 'appointment_id': appointment.id,
-#                 'patient_id': appointment.patient.id,
-#                 'doctor_id': appointment.doctor.id
-#             }
-#         )
+
+class CreateCheckoutSessionView(View):
+    def post(self, request, appointment_id, *args, **kwargs):
+        # YOUR_DOMAIN = 'http://localhost:8000'
+        YOUR_DOMAIN = request.build_absolute_uri('/')[:-1]
+
+        appointment = get_object_or_404(Appointment, id=appointment_id)
+
+        try:
+            checkout_session = stripe.checkout.Session.create(
+                line_items=[
+                    {
+                        'price': 'price_12345',  # Replace with your actual Stripe Price ID
+                        'quantity': 1,
+                    },
+                ],
+                mode='payment',
+                metadata={
+                    'appointment_id': appointment.id,
+                    'patient_id': appointment.patient.id,
+                    'doctor_id': appointment.doctor.id
+                },
+                success_url=YOUR_DOMAIN + '/appointments/payment-success/',
+                cancel_url=YOUR_DOMAIN + '/appointments/payment-cancel/',
+            )
+            return redirect(checkout_session.url, code=303)
+        except Exception as e:
+            return JsonResponse({'error': str(e)})
         
-#         # Save payment record
-#         payment = Payment.objects.create(
-#             appointment=appointment,
-#             amount=appointment.doctor.consultation_fee,
-#             stripe_payment_intent_id=payment_intent.id,
-#             status='pending'
-#         )
-        
-#         return JsonResponse({
-#             'clientSecret': payment_intent.client_secret
-#         })
-#     except Exception as e:
-#         return JsonResponse({'error': str(e)}, status=400)
 
-# @csrf_exempt
-# def stripe_webhook(request):
-#     payload = request.body
-#     sig_header = request.META['HTTP_STRIPE_SIGNATURE']
-#     event = None
+def payment_success(request):
+    return render(request, 'appointments/payment_success.html')
 
-#     try:
-#         event = stripe.Webhook.construct_event(
-#             payload, sig_header, settings.STRIPE_WEBHOOK_SECRET
-#         )
-#     except ValueError as e:
-#         return HttpResponse(status=400)
-#     except stripe.error.SignatureVerificationError as e:
-#         return HttpResponse(status=400)
-
-#     # Handle payment success
-#     if event['type'] == 'payment_intent.succeeded':
-#         payment_intent = event['data']['object']
-#         payment = Payment.objects.get(stripe_payment_intent_id=payment_intent['id'])
-#         payment.status = 'completed'
-#         payment.save()
-        
-#         # Update appointment status
-#         appointment = payment.appointment
-#         appointment.status = 'confirmed'
-#         appointment.save()
-
-#     return HttpResponse(status=200)
+def payment_cancel(request):
+    return render(request, 'appointments/payment_cancel.html')

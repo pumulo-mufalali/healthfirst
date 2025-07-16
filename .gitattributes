@@ -5,8 +5,43 @@
 *.js text
 
 
-*.py linguist-detectable=true
-*.html linguist-detectable=false
-*.css linguist-detectable=true
-*.js linguist-detectable=true
-*.py linguist-language=Python
+# *.py linguist-detectable=true
+# *.html linguist-detectable=false
+# *.css linguist-detectable=true
+# *.js linguist-detectable=true
+# *.py linguist-language=Python
+
+# Recommendation for Implementation Flow
+
+# Start with:
+# Doctor Call Logs — you’ll practice model creation and form handling.
+
+# Then add:
+# Self-Care Dashboard — reuse Django authentication and add role-based logic.
+
+# Next:
+#  Automated Billing System — add real-world logic and formatting (maybe PDF).
+
+# Then go for:
+# SMS Alerts — integrate an API and make your app feel real-world ready.
+
+# Optional fun:
+# SIM/Device Registry — cool IoT-inspired idea, good for your portfolio.
+
+# Advanced step:
+# Celery tasks — for sending SMS/emails in the background.
+
+# 3 Airtel-Relevant Project Ideas (To Boost Your Resume)
+
+# If you can build even one of these before applying, it’ll make you stand out:
+# Airtel Data Usage Tracker (Flutter + API)
+# A mobile app that tracks data consumption using Airtel’s API (or a mock API).
+# Features: Reminders, usage analytics, and budget alerts.
+# Why? Shows telecom domain interest + API skills.
+# USSD Service Simulator (Python/Django)
+# A web-based USSD menu simulator (e.g., for checking balances, airtime top-ups).
+
+# Why? Demonstrates understanding of telecom systems.
+# Customer Feedback Dashboard (Django + PostgreSQL)
+# A real-time analytics dashboard for telecom complaints/suggestions.
+# Why? Aligns with Airtel’s customer experience focus.

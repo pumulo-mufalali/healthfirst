@@ -1,0 +1,9 @@
+{% extends 'accouunts/base.html' %}
+
+{% block content %}
+<div class="container mt-5 text-center">
+  <h2 class="text-danger">❌ Payment Cancelled</h2>
+  <p>Your payment was not completed. Please try again if you wish to confirm your appointment.</p>
+  <a href="{% url 'appointments:list' %}" class="btn btn-warning mt-3">Go Back</a>
+</div>
+{% endblock %}
