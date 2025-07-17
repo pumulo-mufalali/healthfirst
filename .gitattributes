@@ -6,7 +6,7 @@
 
 
 *.py linguist-detectable=true
-*.html linguist-detectable=true
+*.html linguist-detectable=false
 *.css linguist-detectable=true
 *.js linguist-detectable=true
 *.py linguist-language=Python
