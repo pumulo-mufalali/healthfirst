@@ -23,10 +23,46 @@
                     </div>
                     {% endfor %}
                 </div>
-                <button type="submit" class="btn btn-primary">{% if object %}Update{% else %}Book{% endif %} Appointment</button>
+                <div class="col-md-6 mb-3">
+                    <label for="consultation-fee">Consultation Fee (ZMW)</label>
+                    <input type="text" id="consultation-fee" class="form-control" readonly>
+                </div>
                 <a href="{% url 'appointments:list' %}" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-secondary">{% if object %}Update{% else %}Book{% endif %} Appointment</button>
             </form>
         </div>
     </div>
 </div>
+
+<!-- jQuery and AJAX script -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function() {
+    $('#id_doctor').change(function() {
+      var doctorId = $(this).val();
+      if (doctorId) {
+        $.ajax({
+          url: '{% url "appointments:get_doctor_fee" %}',
+          data: {
+            'doctor_id': doctorId
+          },
+          dataType: 'json',
+          success: function(data) {
+            if (data.fee !== null) {
+              $('#consultation-fee').val(data.fee.toFixed(2));
+            } else {
+              $('#consultation-fee').val('');
+            }
+          }
+        });
+      } else {
+        $('#consultation-fee').val('');
+      }
+    });
+
+    // Trigger change on page load if a doctor is pre-selected
+    $('#id_doctor').trigger('change');
+  });
+</script>
+
 {% endblock %}

@@ -160,7 +160,7 @@ LOGOUT_REDIRECT_URL = 'home'
 AUTH_USER_MODEL = 'accounts.User'
 
 # STRIPEeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
-# SITE_ID = 1
+SITE_ID = 1
 
 DJSTRIPE_FOREIGN_KEY_TO_FIELD = "id"  # Default for new projects
 

@@ -6,12 +6,12 @@
     <div class="container">
         <div class="card my-4">
             <div class="card-header bg-primary text-white">
-                <h2 class="mb-0">Appointment Details</h2>
+                <h2 class="mb-0">Appointment Information</h2>
             </div>
             <div class="card-body">
                 <div class="row mb-4">
                     <div class="col-md-6">
-                        <h4>Appointment Information</h4>
+                        <h4>Doctor consultation fee</h4>
                         <p>
                             <strong>Date:</strong> {{ appointment.date }}<br>
                             <strong>Time:</strong> {{ appointment.start_time|time:"H:i" }} - {{ appointment.end_time|time:"H:i" }}<br>
@@ -110,13 +110,6 @@
                                 Add Medical Record
                             </a>
                         {% endif %}
-                        {% if appointment.status == 'pending' and user.patient_profile == appointment.patient %}
-                            <form method="post" action="{% url 'appointments:create_checkout_session' appointment.id %}">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-success">Pay Now</button>
-                            </form>
-                        {% endif %}
-
                     </div>
                 </div>
             </div>
@@ -124,7 +117,16 @@
                 {% if user.user_type == 'doctor' %}
                     <a href="{% url 'doctors:doctor_dashboard' %}" class="btn btn-secondary">Back to Profile</a>
                 {% elif user.user_type == 'patient' %}
-                    <a href="{% url 'patients:patient_dashboard' %}" class="btn btn-secondary">Back to Profile</a>
+                    <div class="d-flex gap-2">
+                        <a href="{% url 'patients:patient_dashboard' %}" class="btn btn-secondary">Back to Profile</a>
+                        
+                        {% if appointment.status == 'pending' and user.patient_profile == appointment.patient %}
+                            <form method="post" action="{% url 'appointments:create_checkout_session' appointment.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-success">Pay Now</button>
+                            </form>
+                        {% endif %}
+                    </div>
                 {% else %}
                     <a href="{% url 'appointments:list' %}" class="btn btn-secondary">Back to List</a>
                 {% endif %}

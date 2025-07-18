@@ -71,6 +71,7 @@ def appointment_detail(request, pk):
 
 
 def appointment_create(request):
+    # doctor_consultation_fee = Doctor.objects.get()
     if not hasattr(request.user, 'patient_profile'):
         messages.error(request, "Only patients can book appointments")
         return redirect('appointments:list')
@@ -183,8 +184,8 @@ def doctor_prescriptions(request):
 
 class CreateCheckoutSessionView(View):
     def post(self, request, appointment_id, *args, **kwargs):
-        # YOUR_DOMAIN = 'http://localhost:8000'
-        YOUR_DOMAIN = request.build_absolute_uri('/')[:-1]
+        YOUR_DOMAIN = 'http://localhost:8000'
+        # YOUR_DOMAIN = request.build_absolute_uri('/')[:-1]
 
         appointment = get_object_or_404(Appointment, id=appointment_id)
 
@@ -209,6 +210,13 @@ class CreateCheckoutSessionView(View):
         except Exception as e:
             return JsonResponse({'error': str(e)})
         
+def get_doctor_fee(request):
+    doctor_id = request.GET.get('doctor_id')
+    try:
+        doctor = Doctor.objects.get(id=doctor_id)
+        return JsonResponse({'fee': float(doctor.consultation_fee)})
+    except (Doctor.DoesNotExist, ValueError, TypeError):
+        return JsonResponse({'fee': None})
 
 def payment_success(request):
     return render(request, 'appointments/payment_success.html')

@@ -70,10 +70,10 @@ def register(request):
             messages.success(request, 'Registration successful.')
 
             if user.user_type == 'patient':
-                return redirect('patients:patient_list')
+                return redirect('patients:patient_dashboard')
 
             elif user.user_type == 'doctor':
-                return redirect('doctors:doctor_list')
+                return redirect('doctors:doctor_dashboard')
             else:
                 return redirect('home')
     else:
