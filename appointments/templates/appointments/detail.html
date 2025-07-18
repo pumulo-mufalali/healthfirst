@@ -11,7 +11,8 @@
             <div class="card-body">
                 <div class="row mb-4">
                     <div class="col-md-6">
-                        <h4>Doctor consultation fee</h4>
+                        <h2>{{appointment.doctor}}</h2>
+                        
                         <p>
                             <strong>Date:</strong> {{ appointment.date }}<br>
                             <strong>Time:</strong> {{ appointment.start_time|time:"H:i" }} - {{ appointment.end_time|time:"H:i" }}<br>
@@ -26,6 +27,7 @@
                             </span>
                         </p>
                         <p><strong>Reason:</strong> {{ appointment.reason }}</p>
+                        <h4 class="text-danger">Amount to be paid: <strong>{{ appointment.doctor.consultation_fee }}</strong></h4>
                     </div>
                     <div class="col-md-6">
                         <h4>{% if request.user %}Patient{% else %}Doctor{% endif %} Information</h4>
