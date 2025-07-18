@@ -30,11 +30,12 @@ A modern web-based Hospital Management System built with **Django**, powered by 
 ##   Dashboards
 
 |  Admin Dashboard  |  Doctor Dashboard  |  Patient Dashboard  |
-|----------------------|---------------------|----------------------|
-| ![Patient](screenshots/Admin_Dash.png) | ![Doctor](screenshots/Doctor_Profile.png) | ![Admin](screenshots/Patient_Profile.png)
+|-------------------|--------------------|---------------------|
+| ![Patient](screenshots/Admin_Dash.png) | ![Doctor](screenshots/Doctor_Profile.png) | ![Admin](screenshots/Patient_Profile.png) |
+
 |  Appointment Booking  |  Patient Info  |  Login Page  |
-|----------------------|---------------------|----------------------|
-| ![Patient](screenshots/Appointment_Booking.png) | ![Doctor](screenshots/Patient_Info.png) | ![Admin](screenshots/Login_Page.png)
+|-----------------------|----------------|--------------|
+| ![Patient](screenshots/Appointment_Booking.png) | ![Doctor](screenshots/Patient_Info.png) | ![Admin](screenshots/Login_Page.png) |
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 This project is licensed under the [MIT License](./LICENSE).
