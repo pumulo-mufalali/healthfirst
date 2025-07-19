@@ -180,12 +180,10 @@ def doctor_prescriptions(request):
     }
     return render(request, 'appointments/prescriptions.html', context)
 
-# STRIPPPPPPPPPPPPPPPPPPPPPPPPPPPEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
-
 class CreateCheckoutSessionView(View):
     def post(self, request, appointment_id, *args, **kwargs):
-        YOUR_DOMAIN = 'http://localhost:8000'
-        # YOUR_DOMAIN = request.build_absolute_uri('/')[:-1]
+        # YOUR_DOMAIN = 'http://localhost:8000'
+        YOUR_DOMAIN = request.build_absolute_uri('/')[:-1]
 
         appointment = get_object_or_404(Appointment, id=appointment_id)
 
