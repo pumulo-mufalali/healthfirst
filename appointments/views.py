@@ -12,8 +12,6 @@ from django.conf import settings
 from django.views import View
 from django.http import JsonResponse
 
-stripe.api_key = settings.STRIPE_SECRET_KEY
-
 
 def appointment_list(request):
     today = today_date.today()
@@ -185,13 +183,14 @@ class CreateCheckoutSessionView(View):
         # YOUR_DOMAIN = 'http://localhost:8000'
         YOUR_DOMAIN = request.build_absolute_uri('/')[:-1]
 
-        appointment = get_object_or_404(Appointment, id=appointment_id)
+        stripe.api_key = settings.STRIPE_SECRET_KEY
 
+        appointment = get_object_or_404(Appointment, id=appointment_id)
         try:
             checkout_session = stripe.checkout.Session.create(
                 line_items=[
                     {
-                        'price': 'price_12345',  # Replace with your actual Stripe Price ID
+                        'price': settings.STRIPE_CONSULTATION_PRICE_ID,
                         'quantity': 1,
                     },
                 ],
@@ -204,10 +203,12 @@ class CreateCheckoutSessionView(View):
                 success_url=YOUR_DOMAIN + '/appointments/payment-success/',
                 cancel_url=YOUR_DOMAIN + '/appointments/payment-cancel/',
             )
+            print('View createdddddddddddddddddddddddd')
             return redirect(checkout_session.url, code=303)
         except Exception as e:
             return JsonResponse({'error': str(e)})
-        
+
+
 def get_doctor_fee(request):
     doctor_id = request.GET.get('doctor_id')
     try:
