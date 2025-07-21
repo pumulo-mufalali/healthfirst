@@ -16,7 +16,7 @@ from pathlib import Path
 
 
 env = environ.Env(
-  DEBUG = (bool, False)
+  DEBUG = False,
 )
 environ.Env.read_env()
 
@@ -28,12 +28,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('DJANGO_SECRET_KEY')
+SECRET_KEY=os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env('DEBUG')
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 AUTH_USER_MODEL = 'accounts.User'
 
@@ -159,13 +159,12 @@ LOGOUT_REDIRECT_URL = 'home'
 
 AUTH_USER_MODEL = 'accounts.User'
 
-
 SITE_ID = 1
 
 DJSTRIPE_FOREIGN_KEY_TO_FIELD = "id"
 
-STRIPE_CONSULTATION_PRICE_ID = env('STRIPE_CONSULTATION_PRICE_ID')
+STRIPE_CONSULTATION_PRICE_ID=env('STRIPE_CONSULTATION_PRICE_ID')
 
 STRIPE_PUBLIC_KEY=env('STRIPE_PUBLIC_KEY')
 STRIPE_SECRET_KEY=env('STRIPE_SECRET_KEY')
-STRIPE_WEBHOOK_SECRET=env('STRIPE_WEBHOOK_SECRET')
+# STRIPE_WEBHOOK_SECRET=env('STRIPE_WEBHOOK_SECRET')

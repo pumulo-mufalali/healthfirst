@@ -45,7 +45,6 @@ def is_admin_or_staff(user):
     return user.is_authenticated and (user.user_type in ['admin', 'staff'] or user.is_superuser)
 
 
-# @user_passes_test(is_admin_or_staff)
 def patient_list(request):
     patients = Patient.objects.all()
 

@@ -185,7 +185,7 @@
                         <div class="card-body">
                             {% if patient.allergies %}
                                 <p>{{ patient.allergies|linebreaks }}</p>
-                                <a href="{% url 'patients:patient_update' patient.id %}" class="btn btn-sm btn-outline-danger">Update</a>
+                                <!-- <a href="{% url 'appointments:detail' appointment.id %}" class="btn btn-sm btn-outline-danger">Update</a> -->
                             {% else %}
                                 <p class="text-muted">No allergies recorded</p>
                                 <a href="{% url 'patients:patient_update' patient.id %}" class="btn btn-sm btn-danger">Add Allergies</a>
