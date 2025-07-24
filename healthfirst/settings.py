@@ -47,11 +47,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
+    'django.contrib.redirects',
+
     'accounts.apps.AccountsConfig',
     'patients.apps.PatientsConfig',
     'doctors.apps.DoctorsConfig',
     'appointments.apps.AppointmentsConfig',
+    'payments.apps.PaymentsConfig',
 
     'djstripe',
 

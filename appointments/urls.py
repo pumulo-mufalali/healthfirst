@@ -1,6 +1,5 @@
 from django.urls import path
 from . import views
-from payments.views import create_checkout_session
 
 app_name = 'appointments'
 
@@ -13,11 +12,4 @@ urlpatterns = [
 
     path('medical_record_list/<int:pk>/', views.medical_record_list, name='record_list'),
     path('prescriptions/', views.doctor_prescriptions, name='doctor_prescriptions'),
-
-    path('create-checkout-session/<int:appointment_id>/', views.CreateCheckoutSessionView.as_view(), name='create_checkout_session'),
-    path('payment-success/', views.payment_success, name='payment_success'),
-    path('payment-cancel/', views.payment_cancel, name='payment_cancel'),
-
-    path('ajax/get-doctor-fee/', views.get_doctor_fee, name='get_doctor_fee'),
-    path('pay/<int:appointment_id>/', create_checkout_session, name='create_checkout_session'),
 ]
