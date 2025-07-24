@@ -15,11 +15,6 @@ import environ
 from pathlib import Path
 
 
-env = environ.Env(
-  DEBUG = False,
-)
-environ.Env.read_env()
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -165,11 +160,15 @@ SITE_ID = 1
 
 DJSTRIPE_FOREIGN_KEY_TO_FIELD = "id"
 
+# Initialise environment variables
+env = environ.Env()
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+
 # Stripe Configuration
-STRIPE_CONSULTATION_PRICE_ID = env('STRIPE_CONSULTATION_PRICE_ID', default='')
-STRIPE_PUBLIC_KEY = env('STRIPE_PUBLIC_KEY', default='')
-STRIPE_SECRET_KEY = env('STRIPE_SECRET_KEY', default='')
-STRIPE_WEBHOOK_SECRET = env('STRIPE_WEBHOOK_SECRET', default='')
+STRIPE_CONSULTATION_PRICE_ID = os.environ.get('STRIPE_CONSULTATION_PRICE_ID', default='')
+STRIPE_PUBLIC_KEY = os.environ.get('STRIPE_PUBLIC_KEY', default='')
+STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY', default='')
+STRIPE_WEBHOOK_SECRET = os.environ.get ('STRIPE_WEBHOOK_SECRET', default='')
 
 # dj-stripe settings
 DJSTRIPE_USE_NATIVE_JSONFIELD = True

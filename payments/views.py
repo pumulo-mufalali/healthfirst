@@ -18,7 +18,7 @@ def create_checkout_session(request, appointment_id):
                 'price': settings.STRIPE_CONSULTATION_PRICE_ID,
                 'quantity': 1,
             }],
-            mode='payment',
+            mode='subscription',
             success_url=request.build_absolute_uri('/appointments/payment-success/'),
             cancel_url=request.build_absolute_uri('/appointments/payment-cancel/'),
             metadata={'appointment_id': appointment_id}
