@@ -123,7 +123,7 @@
                         <a href="{% url 'patients:patient_dashboard' %}" class="btn btn-secondary">Back to Profile</a>
                         
                         {% if appointment.status == 'pending' and user.patient_profile == appointment.patient %}
-                            <form method="post" action="{% url 'appointments:create_checkout_session' appointment.id %}">
+                            <form action="{% url 'payments:create_checkout_session' appointment.id %}" method="post">
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-success">Pay Now</button>
                             </form>

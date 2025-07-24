@@ -180,9 +180,7 @@ def doctor_prescriptions(request):
 
 class CreateCheckoutSessionView(View):
     def post(self, request, appointment_id, *args, **kwargs):
-        # YOUR_DOMAIN = 'http://localhost:8000'
         YOUR_DOMAIN = request.build_absolute_uri('/')[:-1]
-
         stripe.api_key = settings.STRIPE_SECRET_KEY
 
         appointment = get_object_or_404(Appointment, id=appointment_id)
