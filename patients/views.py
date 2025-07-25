@@ -41,6 +41,7 @@ def patient_dashboard(request):
     }
     return render(request, 'patients/dashboard.html', context)
 
+
 def is_admin_or_staff(user):
     return user.is_authenticated and (user.user_type in ['admin', 'staff'] or user.is_superuser)
 

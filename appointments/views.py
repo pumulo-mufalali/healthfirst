@@ -7,12 +7,6 @@ from datetime import date as today_date
 from doctors.models import Doctor
 
 
-import stripe
-from django.conf import settings
-from django.views import View
-from django.http import JsonResponse
-
-
 def appointment_list(request):
     today = today_date.today()
 

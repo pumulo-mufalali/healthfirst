@@ -13,11 +13,6 @@ class AppointmentForm(forms.ModelForm):
     start_time = forms.TimeField(widget=forms.TimeInput(attrs={'type': 'time'}))
     end_time = forms.TimeField(widget=forms.TimeInput(attrs={'type': 'time'}))
 
-    doctor_fee = forms.DecimalField(
-        label='Consultation Fee',
-        required=False,
-        disabled=True
-    )
 
     class Meta:
         model = Appointment

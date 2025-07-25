@@ -10,7 +10,6 @@ from appointments.models import Appointment
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 def create_checkout_session(request, appointment_id):
-  
     try:
         checkout_session = stripe.checkout.Session.create(
             payment_method_types=['card'],
@@ -28,7 +27,7 @@ def create_checkout_session(request, appointment_id):
         return JsonResponse({'error': str(e)})
 
 def get_doctor_fee(request):
-    doctor_id = request.GET.get('doctor_id')
+    doctor_id = Doctor.objects.get(doctor_id)
     try:
         doctor = Doctor.objects.get(id=doctor_id)
         return JsonResponse({'fee': float(doctor.consultation_fee)})

@@ -42,7 +42,7 @@
       var doctorId = $(this).val();
       if (doctorId) {
         $.ajax({
-          url: '{% url "appointments:get_doctor_fee" %}',
+          url: '{% url "payments:get_doctor_fee" %}',
           data: {
             'doctor_id': doctorId
           },
