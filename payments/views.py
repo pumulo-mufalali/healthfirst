@@ -39,35 +39,3 @@ def payment_success(request):
 
 def payment_cancel(request):
     return render(request, 'payments/payment_cancel.html')
-
-
-
-# class CreateCheckoutSessionView(View):
-#     def post(self, request, appointment_id, *args, **kwargs):
-#         YOUR_DOMAIN = request.build_absolute_uri('/')[:-1]
-#         stripe.api_key = settings.STRIPE_SECRET_KEY
-
-#         appointment = get_object_or_404(Appointment, id=appointment_id)
-#         try:
-#             checkout_session = stripe.checkout.Session.create(
-#                 line_items=[
-#                     {
-#                         'price': settings.STRIPE_CONSULTATION_PRICE_ID,
-#                         'quantity': 1,
-#                     },
-#                 ],
-#                 mode='payment',
-#                 metadata={
-#                     'appointment_id': appointment.id,
-#                     'patient_id': appointment.patient.id,
-#                     'doctor_id': appointment.doctor.id
-#                 },
-#                 success_url=YOUR_DOMAIN + '/appointments/payment-success/',
-#                 cancel_url=YOUR_DOMAIN + '/appointments/payment-cancel/',
-#             )
-#             print('View createdddddddddddddddddddddddd')
-#             return redirect(checkout_session.url, code=303)
-#         except Exception as e:
-#             return JsonResponse({'error': str(e)})
-
-
