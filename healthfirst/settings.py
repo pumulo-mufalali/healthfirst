@@ -174,3 +174,11 @@ STRIPE_WEBHOOK_SECRET = os.environ.get ('STRIPE_WEBHOOK_SECRET', default='')
 DJSTRIPE_USE_NATIVE_JSONFIELD = True
 DJSTRIPE_WEBHOOK_VALIDATION = 'verify_signature'
 DJSTRIPE_WEBHOOK_SECRET = STRIPE_WEBHOOK_SECRET
+
+# SMTP Configurations
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', default='')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', default='')
