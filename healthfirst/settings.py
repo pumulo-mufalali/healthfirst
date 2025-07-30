@@ -165,20 +165,20 @@ env = environ.Env()
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 # Stripe Configuration
-STRIPE_CONSULTATION_PRICE_ID = os.environ.get('STRIPE_CONSULTATION_PRICE_ID', default='')
-STRIPE_PUBLIC_KEY = os.environ.get('STRIPE_PUBLIC_KEY', default='')
-STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY', default='')
-STRIPE_WEBHOOK_SECRET = os.environ.get ('STRIPE_WEBHOOK_SECRET', default='')
+STRIPE_CONSULTATION_PRICE_ID=os.environ.get('STRIPE_CONSULTATION_PRICE_ID', default='')
+STRIPE_PUBLIC_KEY=os.environ.get('STRIPE_PUBLIC_KEY', default='')
+STRIPE_SECRET_KEY=os.environ.get('STRIPE_SECRET_KEY', default='')
+STRIPE_WEBHOOK_SECRET=os.environ.get ('STRIPE_WEBHOOK_SECRET', default='')
 
 # dj-stripe settings
-DJSTRIPE_USE_NATIVE_JSONFIELD = True
-DJSTRIPE_WEBHOOK_VALIDATION = 'verify_signature'
-DJSTRIPE_WEBHOOK_SECRET = STRIPE_WEBHOOK_SECRET
+DJSTRIPE_USE_NATIVE_JSONFIELD=True
+DJSTRIPE_WEBHOOK_VALIDATION='verify_signature'
+DJSTRIPE_WEBHOOK_SECRET=STRIPE_WEBHOOK_SECRET
 
 # SMTP Configurations
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', default='')
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', default='')
+EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST='smtp.gmail.com'
+EMAIL_PORT=587
+EMAIL_USE_TLS=True
+EMAIL_HOST_USER=os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD=os.environ.get('EMAIL_HOST_PASSWORD')
