@@ -7,6 +7,8 @@ from patients.models import Patient
 from appointments.models import Appointment, MedicalRecord
 from datetime import date as today_date
 
+from doctors.models import Doctor
+
 
 def home(request):
     return render(request, 'accounts/home.html')
@@ -79,29 +81,9 @@ def register(request):
     else:
         form = UserRegistrationForm()
 
-    return render(request, 'accounts/register.html', {'form': form})
+    return render(request, 'accounts/register.html', {'form':form})
 
+def doctor_list(request):
+    doctors = Doctor.objects.all()
 
-
-# def user_login(request):
-#     if request.method == 'POST':
-#         form = AuthenticationForm(request, data=request.POST)
-#         if form.is_valid():
-#             user = form.get_user()
-#             login(request, user)
-#             return redirect('dashboard')
-#     else:
-#         form = AuthenticationForm()
-#     return render(request, 'accounts/login.html', {'form': form})
-
-
-# @login_required
-# def profile(request):
-#     if request.method == 'POST':
-#         form = UserProfileForm(request.POST, request.FILES, instance=request.user)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('profile')
-#     else:
-#         form = UserProfileForm(instance=request.user)
-#     return render(request, 'accounts/profile.html', {'form': form})
+    return render(request, 'accounts/doctor_list.html', {'doctors':doctors})

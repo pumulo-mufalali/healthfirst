@@ -1,0 +1,36 @@
+{% extends 'accounts/base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1 class="my-4"><strong>Doctors</strong></h1>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Name</th>
+                    <th>Specialization</th>
+                    <th>Email</th>
+                    <th>Gender</th>
+                    <th>License No.</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for doctor in doctors %}
+                <tr>
+                    <td>{{ doctor.user.get_full_name }}</td>
+                    <td>{{ doctor.specialization }}</td>
+                    <td>{{ doctor.user.email }}</td>
+                    <td>{{ doctor.gender }}</td>
+                    <td>{{ doctor.license_number }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center">No doctors found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
