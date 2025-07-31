@@ -5,6 +5,12 @@
 *.js text
 
 
+*.py linguist-detectable=true
+*.html linguist-detectable=false
+*.css linguist-detectable=true
+*.js linguist-detectable=true
+*.py linguist-language=Python
+
 # Recommendation for Implementation Flow
 
 # Start with:
