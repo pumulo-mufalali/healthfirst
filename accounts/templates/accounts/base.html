@@ -46,14 +46,15 @@
                                 <li class="nav-item">
                                     <a class="nav-link" href="{% url 'accounts:dashboard' %}">Dashboard</a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{% url 'appointments:list' %}">Appointments</a>
-                                </li>
+                                
                                 <li class="nav-item">
                                     <a class="nav-link" href="{% url 'accounts:doctor_list' %}">Doctors</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="{% url 'patients:patient_list' %}">Patients</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'appointments:list' %}">Appointments</a>
                                 </li>
                             {% endif %}
                         </li>

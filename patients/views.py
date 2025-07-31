@@ -26,7 +26,7 @@ def patient_dashboard(request):
                 feet, inches = patient.height.split("'")
                 height_m = (float(feet) * 0.3048) + (float(inches.strip('"')) * 0.0254)
             else:
-                height_m = float(patient.height) / 100  # assuming cm if no feet/inches
+                height_m = float(patient.height) / 100
             
             bmi = round(float(patient.weight) / (height_m ** 2), 1)
         except:
@@ -63,10 +63,21 @@ def patient_detail(request, pk):
     return render(request, 'patients/detail.html', context)
 
 
+import uuid
+from django.shortcuts import render, redirect
+from .models import Patient  # adjust import path as needed
+
+def generate_unique_patient_id():
+    while True:
+        new_id = str(uuid.uuid4())[:8]  # Generates a short unique ID
+        if not Patient.objects.filter(patient_id=new_id).exists():
+            return new_id
+
 def patient_create(request):
     if request.method == 'POST':
         user_form = PatientUserForm(request.POST)
         patient_form = PatientForm(request.POST)
+        
         if user_form.is_valid() and patient_form.is_valid():
             user = user_form.save(commit=False)
             user.user_type = 'patient'
@@ -74,15 +85,24 @@ def patient_create(request):
 
             patient = patient_form.save(commit=False)
             patient.user = user
+
+            if Patient.objects.filter(patient_id=patient.patient_id).exists():
+                patient.patient_id = generate_unique_patient_id()
+
             patient.save()
             return redirect('patients:patient_detail', pk=patient.pk)
     else:
         user_form = PatientUserForm()
         patient_form = PatientForm()
 
-    context = {'user_form': user_form, 'patient_form': patient_form, 'title': 'Create Patient'}
+    context = {
+        'user_form': user_form,
+        'patient_form': patient_form,
+        'title': 'Create Patient'
+    }
 
     return render(request, 'patients/form.html', context)
+
 
 def patient_update(request, pk):
     patient = get_object_or_404(Patient, user_id=pk)
