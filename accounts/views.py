@@ -6,6 +6,7 @@ from .forms import UserRegistrationForm
 from patients.models import Patient
 from appointments.models import Appointment, MedicalRecord
 from datetime import date as today_date
+from .utils import DashboardCalculator, TemplateDataProcessor, NotificationProcessor
 
 from doctors.models import Doctor
 
@@ -15,23 +16,22 @@ def home(request):
 
 
 def dashboard(request):
-    today = today_date.today()
+    """Enhanced dashboard view using Python utilities to reduce HTML complexity."""
+    # Use the new Python utility to calculate all dashboard statistics
+    dashboard_stats = DashboardCalculator.get_dashboard_stats(request.user.user_type)
     
-    appointments = Appointment.objects.all()
-    todays_appointment = appointments.filter(date=today).count
-    total_appointment = appointments.count()
-
-    total_patients = Patient.objects.count()
-
-    total_record = MedicalRecord.objects.all().count()
-
+    # Get notifications
+    notifications = NotificationProcessor.get_system_notifications(request.user)
+    
+    # Format data for templates
+    if 'recent_appointments' in dashboard_stats:
+        dashboard_stats['formatted_recent_appointments'] = TemplateDataProcessor.format_appointment_data(
+            dashboard_stats['recent_appointments']
+        )
+    
     context = {
-        'appointments':appointments,
-        'total_appointment':total_appointment,
-        'todays_appointment':todays_appointment,
-
-        'total_medical_record':total_record,
-        'total_patients':total_patients,
+        **dashboard_stats,
+        'notifications': notifications,
     }
     return render(request, 'accounts/dashboard.html', context)
 
