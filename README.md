@@ -8,11 +8,11 @@ A robust, full-stack platform engineered for high-integrity data environments. B
 
 ##   Features
 
-1. Role-Based Access Control (RBAC): Ensures strict hierarchical data access (Admin, Manager, User).
-2. Secure Transaction Processing: Integrated, PCI-compliant payment gateway for fee and service billing.
-3. Audit-Ready Records Management: Maintains immutable logs of all transactions and user activities.
-4. Comprehensive Dashboard Analytics: Provides real-time insights into system operations and financial summaries.
-5. Advanced User Authentication & Session Management: Implements industry-standard security protocols.
+1. **Role-Based Access Control (RBAC)**: Ensures strict hierarchical data access (Admin, Manager, User).
+2. **Secure Transaction Processing**: Integrated, PCI-compliant payment gateway for fee and service billing.
+3. **Audit-Ready Records Management**: Maintains immutable logs of all transactions and user activities.
+4. **Comprehensive Dashboard Analytics**: Provides real-time insights into system operations and financial summaries.
+5. **Advanced User Authentication & Session Management**: Implements industry-standard security protocols.
 
 ---
 
