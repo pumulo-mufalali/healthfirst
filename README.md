@@ -1,6 +1,6 @@
 # Hospital Management System (HMS)
 
-A modern web-based Hospital Management System built with **Django**, powered by **PostgreSQL**, and integrated with **Stripe** for secure hospital billing.
+A robust, full-stack platform engineered for high-integrity data environments. Built with Django and PostgreSQL, it features secure Stripe payment processing, mirroring the reliability and security required in financial systems.
 
 ![Main](screenshots/System_Features.png)
 
@@ -8,22 +8,22 @@ A modern web-based Hospital Management System built with **Django**, powered by 
 
 ##   Features
 
-- Role-based access (Admin, Doctor, Patient)
-- Appointment booking & doctor availability
-- Patient medical records & history
-- Stripe payment integration
-- Admin dashboard with analytics
-- Secure login & user management
+1. Role-Based Access Control (RBAC): Ensures strict hierarchical data access (Admin, Manager, User).
+2. Secure Transaction Processing: Integrated, PCI-compliant payment gateway for fee and service billing.
+3. Audit-Ready Records Management: Maintains immutable logs of all transactions and user activities.
+4. Comprehensive Dashboard Analytics: Provides real-time insights into system operations and financial summaries.
+5. Advanced User Authentication & Session Management: Implements industry-standard security protocols.
 
 ---
 
 ##  Tech Stack
 
-- **Backend**: Django
-- **Database**: PostgreSQL
-- **Payments**: Stripe
-- **Frontend**: Bootstrap + Django templates
-- **Deployment**: Compatible with Heroku, Render, etc.
+1. **Backend Framework**: Django (Python)
+2. **Database**: PostgreSQL (Emphasizing ACID compliance and data integrity)
+3. **Payment Gateway**: Stripe API
+4. **Frontend**: Bootstrap + Django Templates (Responsive UI)
+5. **Security**: CSRF protection, ORM-based SQL injection prevention, secure authentication.
+6. **Deployment**: Container-ready for secure, scalable deployment (Docker).
 
 ---
 

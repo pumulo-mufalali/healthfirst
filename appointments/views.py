@@ -63,7 +63,6 @@ def appointment_detail(request, pk):
 
 
 def appointment_create(request):
-    # doctor_consultation_fee = Doctor.objects.get()
     if not hasattr(request.user, 'patient_profile'):
         messages.error(request, "Only patients can book appointments")
         return redirect('appointments:list')
@@ -87,7 +86,6 @@ def appointment_create(request):
 def add_prescription(request, appointment_pk):
     appointment = get_object_or_404(Appointment, pk=appointment_pk)
     
-    # Check permission - only doctors and staff can add prescriptions
     if not (request.user.is_staff or hasattr(request.user, 'doctor_profile')):
         messages.error(request, "Only authorized medical staff can add prescriptions")
         return redirect('appointments:detail', pk=appointment_pk)
