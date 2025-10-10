@@ -16,8 +16,6 @@ def home(request):
 
 
 def dashboard(request):
-    """Enhanced dashboard view using Python utilities to reduce HTML complexity."""
-    # Use the new Python utility to calculate all dashboard statistics
     dashboard_stats = DashboardCalculator.get_dashboard_stats(request.user.user_type)
     
     # Get notifications

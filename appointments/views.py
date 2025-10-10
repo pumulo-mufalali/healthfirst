@@ -34,7 +34,6 @@ def appointment_list(request):
 def appointment_detail(request, pk):
     appointment = get_object_or_404(Appointment, pk=pk)
     
-    # Check permission
     if not (request.user.is_staff or 
             hasattr(request.user, 'doctor_profile') and appointment.doctor == request.user.doctor_profile or
             hasattr(request.user, 'patient_profile') and appointment.patient == request.user.patient_profile):
