@@ -81,6 +81,22 @@ def register(request):
 
     return render(request, 'accounts/register.html', {'form':form})
 
+
+@unauthorized_user
+def doctor_register(request):
+    if request.method == 'POST':
+        form = UserRegistrationForm(request.POST, request.FILES)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            messages.success(request, 'Registration successful.')
+
+            return redirect('doctors:doctor_dashboard')
+    else:
+        form = UserRegistrationForm()
+
+    return render(request, 'accounts/register.html', {'form':form})
+
 def doctor_list(request):
     doctors = Doctor.objects.all()
 
