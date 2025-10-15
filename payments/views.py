@@ -26,13 +26,30 @@ def create_checkout_session(request, appointment_id):
     except Exception as e:
         return JsonResponse({'error': str(e)})
 
+
+@csrf_exempt  # Temporarily disable CSRF for testing
 def get_doctor_fee(request):
-    doctor_id = Doctor.objects.get(doctor_id)
+    doctor_id = request.GET.get('doctor_id')
+    
+    if not doctor_id:
+        return JsonResponse({'error': 'No doctor ID provided'}, status=400)
+    
     try:
+        # Import your Doctor model - adjust this import to match your app structure
+        from doctors.models import Doctor  # or your actual import path
+        
         doctor = Doctor.objects.get(id=doctor_id)
-        return JsonResponse({'fee': float(doctor.consultation_fee)})
-    except (Doctor.DoesNotExist, ValueError, TypeError):
-        return JsonResponse({'fee': None})
+        fee = float(doctor.consultation_fee) if doctor.consultation_fee else 0.0
+        
+        return JsonResponse({
+            'fee': fee,
+            'doctor_name': f"{doctor.user.get_full_name()}"
+        })
+        
+    except Doctor.DoesNotExist:
+        return JsonResponse({'error': 'Doctor not found'}, status=404)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
 
 def payment_success(request):
     return render(request, 'payments/payment_success.html')

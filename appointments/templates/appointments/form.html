@@ -28,7 +28,7 @@
                     <input type="text" id="consultation-fee" class="form-control" readonly>
                 </div>
                 <a href="{% url 'appointments:list' %}" class="btn btn-secondary">Cancel</a>
-                <button type="submit" class="btn btn-secondary">{% if object %}Update{% else %}Book{% endif %} Appointment</button>
+                <button type="submit" class="btn btn-primary">{% if object %}Update{% else %}Book{% endif %} Appointment</button>
             </form>
         </div>
     </div>
@@ -38,8 +38,8 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
   $(document).ready(function() {
-    $('#id_doctor').change(function() {
-      var doctorId = $(this).val();
+    function updateConsultationFee() {
+      var doctorId = $('#id_doctor').val();
       if (doctorId) {
         $.ajax({
           url: '{% url "payments:get_doctor_fee" %}',
@@ -48,20 +48,26 @@
           },
           dataType: 'json',
           success: function(data) {
-            if (data.fee !== null) {
-              $('#consultation-fee').val(data.fee.toFixed(2));
+            if (data.fee !== null && data.fee !== undefined) {
+              $('#consultation-fee').val('ZMW ' + data.fee.toFixed(2));
             } else {
-              $('#consultation-fee').val('');
+              $('#consultation-fee').val('Fee not available');
             }
+          },
+          error: function() {
+            $('#consultation-fee').val('Error loading fee');
           }
         });
       } else {
-        $('#consultation-fee').val('');
+        $('#consultation-fee').val('Please select a doctor');
       }
-    });
+    }
 
-    // Trigger change on page load if a doctor is pre-selected
-    $('#id_doctor').trigger('change');
+    // Update fee when doctor selection changes
+    $('#id_doctor').change(updateConsultationFee);
+
+    // Trigger on page load if a doctor is pre-selected (for update scenarios)
+    updateConsultationFee();
   });
 </script>
 
