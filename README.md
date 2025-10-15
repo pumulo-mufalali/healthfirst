@@ -27,7 +27,7 @@ A robust, full-stack platform engineered for high-integrity data environments. B
 
 ---
 
-##   Dashboards
+##   Screenshots
 
 |  Admin Dashboard  |  Doctor Dashboard  |  Patient Dashboard  |
 |-------------------|--------------------|---------------------|
