@@ -95,7 +95,7 @@ def doctor_register(request):
     else:
         form = UserRegistrationForm()
 
-    return render(request, 'accounts/register.html', {'form':form})
+    return render(request, 'accounts/doctor_register.html', {'form':form})
 
 def doctor_list(request):
     doctors = Doctor.objects.all()

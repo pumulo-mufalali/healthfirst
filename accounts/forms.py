@@ -6,8 +6,7 @@ class UserRegistrationForm(UserCreationForm):
     model = User
     fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2', 
                  'user_type', 'phone', 'address', 'profile_picture',
-                 )
-        
+                 )  
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
