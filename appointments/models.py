@@ -24,6 +24,7 @@ class Appointment(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name='appointments')
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, related_name='appointments')
     date = models.DateField()
+    time = models.TimeField(timezone.now)
     start_time = models.TimeField()
     end_time = models.TimeField()
     reason = models.TextField(blank=True, null=True)
