@@ -99,9 +99,9 @@
         
         <div class="card-footer">
             {% if is_doctor %}
-            <a href="{% url 'doctors:doctor_update' user.pk %}" class="btn btn-warning">Edit Profile</a>
+                <a href="{% url 'doctors:doctor_update' user.pk %}" class="btn btn-warning">Edit Profile</a>
+                <a href="{% url 'doctors:doctor_dashboard' %}" class="btn btn-secondary">Back to Profile</a>
             {% endif %}
-            <a href="{% url 'doctors:doctor_dashboard' %}" class="btn btn-secondary">Back to Profile</a>
         </div>
     </div>
 </div>
