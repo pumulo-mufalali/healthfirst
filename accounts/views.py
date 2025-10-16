@@ -97,6 +97,9 @@ def doctor_register(request):
 
     return render(request, 'accounts/doctor_register.html', {'form':form})
 
+def services(request):
+    return render(request, 'accounts/services.html')
+
 def doctor_list(request):
     doctors = Doctor.objects.all()
 
