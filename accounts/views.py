@@ -67,20 +67,19 @@ def register(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
+
             messages.success(request, 'Registration successful.')
 
-            if user.user_type == 'patient':
-                return redirect('patients:patient_dashboard')
-
-            elif user.user_type == 'doctor':
+            if user.user_type == 'doctor':
                 return redirect('doctors:doctor_dashboard')
+            elif user.user_type == 'patient':
+                return redirect('patients:patient_dashboard')
             else:
                 return redirect('home')
     else:
         form = UserRegistrationForm()
 
     return render(request, 'accounts/register.html', {'form':form})
-
 
 @unauthorized_user
 def doctor_register(request):
@@ -93,6 +92,7 @@ def doctor_register(request):
 
             return redirect('doctors:doctor_dashboard')
     else:
+
         form = UserRegistrationForm()
 
     return render(request, 'accounts/doctor_register.html', {'form':form})
